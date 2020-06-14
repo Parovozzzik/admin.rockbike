@@ -1,0 +1,58 @@
+<tr id="contact-1-header" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/goods-attrs/view/' ~ good_attr.good_attr_id,
+        'value': good_attr.good_attr_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/goods/view/' ~ good_attr.good_id,
+        'value': good_attr.good_name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/attrs/view/' ~ good_attr.attr_id,
+        'value': good_attr.attr_name,
+    } %}
+
+    {% if (good_attr.attr_type == 'int' or good_attr.attr_type == 'string' or good_attr.attr_type == 'float') %}
+        {% set value = good_attr['value_' ~ good_attr.type] %}
+    {% elseif (good_attr.attr_type == 'table') %}
+        {% set value = good_attr['value_int'] %}
+        {% set refName = good_attr.attr_table_name %}
+    {% elseif (good_attr.attr_type == 'ref') %}
+        {% set refName = good_attr.ref_name %}
+        {% set refId = good_attr.attr_ref_id %}
+        {% if (good_attr.ref_type == 'int' or good_attr.ref_type == 'string' or good_attr.ref_type == 'text') %}
+            {% set value = good_attr['ref_value_' ~ good_attr.ref_type] %}
+        {% else %}
+            {% set value = good_attr['parent_ref_value_' ~ good_attr.parent_ref_type] %}
+        {% endif %}
+    {% endif %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': value,
+    } %}
+
+    {% if (good_attr.attr_type == 'table') %}
+        {% include '/App/Views/Components/Table/td/link.twig' with {
+            'href': '/' ~ refName,
+            'value': refName,
+        } %}
+    {% else %}
+        {% include '/App/Views/Components/Table/td/link.twig' with {
+            'href': '/references/view/' ~ refId,
+            'value': refName,
+        } %}
+    {% endif %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/goods-attrs/edit/' ~ good_attr.good_attr_id},
+        {'icon': 'hs-admin-trash', 'href': '/goods-attrs/delete/' ~ good_attr.good_attr_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

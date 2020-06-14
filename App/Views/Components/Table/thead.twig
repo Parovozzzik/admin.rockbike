@@ -1,0 +1,15 @@
+<thead class="g-hidden-sm-down g-font-weight-300 g-color-gray-dark-v8 g-bg-gray-light-v8">
+    <tr>
+        <th class="g-brd-top-none g-pl-20">#</th>
+
+        {% for column in columns %}
+            <th class="g-brd-top-none">{{ column }}</th>
+        {% endfor %}
+
+        <th class="g-brd-top-none">
+            <div class="btn btn-sm u-btn-outline-red">
+                Total {{ total }}
+            </div>
+        </th>
+    </tr>
+</thead>

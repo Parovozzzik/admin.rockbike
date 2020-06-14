@@ -1,0 +1,41 @@
+<tr id="attr_{{ attr.attr_id }}" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/attrs/view/' ~ attr.attr_id,
+        'value': attr.attr_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': attr.name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': attr.slug,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': attr.type,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': attr.visible,
+        'text_enabled': 'Visible',
+        'text_disabled': 'Not visible',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': attr.deleted,
+        'text_enabled': 'Deleted',
+        'text_disabled': 'Not deleted',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/attrs/edit/' ~ attr.attr_id},
+        {'icon': 'hs-admin-trash', 'href': '/attrs/delete/' ~ attr.attr_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

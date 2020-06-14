@@ -1,0 +1,41 @@
+<tr id="good_{{ good.good_id }}" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/goods/view/' ~ good.good_id,
+        'value': good.good_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': good.name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': good.slug,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': good.price,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': good.visible,
+        'text_enabled': 'Visible',
+        'text_disabled': 'Not visible',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': good.deleted,
+        'text_enabled': 'Deleted',
+        'text_disabled': 'Not deleted',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/goods/edit/' ~ good.good_id},
+        {'icon': 'hs-admin-trash', 'href': '/goods/delete/' ~ good.good_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

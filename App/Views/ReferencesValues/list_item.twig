@@ -1,0 +1,47 @@
+<tr id="contact-1-header" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/references-values/view/' ~ value.reference_value_id,
+        'value': value.reference_value_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': value.r_name,
+    } %}
+
+    {% if value.r_type == 'int' or value.r_type == 'string' or value.r_type == 'text' %}
+        {% include '/App/Views/Components/Table/td/text.twig' with {
+            'value': value['value_' ~ value.r_type],
+        } %}
+    {% endif %}
+
+    {% if value.r_type == 'ref' %}
+        {% include '/App/Views/Components/Table/td/link.twig' with {
+            'href': '/references-values/view/' ~ value.value_int,
+            'value': value['rv2_value_' ~ value.r2_type],
+        } %}
+    {% endif %}
+
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': value.visible,
+        'text_enabled': 'Visible',
+        'text_disabled': 'Not visible',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': value.deleted,
+        'text_enabled': 'Deleted',
+        'text_disabled': 'Not deleted',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/references-values/edit/' ~ value.reference_value_id},
+        {'icon': 'hs-admin-trash', 'href': '/references-values/delete/' ~ value.reference_value_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

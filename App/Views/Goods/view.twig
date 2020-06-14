@@ -1,0 +1,193 @@
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate" name="good">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/goods" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Good #{{ data.model.good_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'name',
+                        'model': 'good',
+                        'value': data.model.name,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'slug',
+                        'model': 'good',
+                        'value': data.model.slug,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/textarea.twig' with {
+                        'id': 'description',
+                        'model': 'good',
+                        'value': data.model.description,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'price',
+                        'model': 'good',
+                        'value': data.model.price,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'good',
+                        'value': data.model.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'good',
+                        'value': data.model.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 1
+                    } %}
+
+                    <a href="/goods/edit/{{ data.model.good_id }}" class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Edit
+                    </a>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <header>
+                    <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                        Categories
+                    </h2>
+                </header>
+
+                <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                <div class="">
+                    <table class="table table-responsive-sm w-100">
+
+                        {% include '/App/Views/Components/Table/thead.twig' with {
+                            'columns': ['Name', 'Slug', 'Visible', 'Deleted'],
+                            'total': params.categories|length
+                        } %}
+
+                        <tbody>
+                        {% for category in params.categories %}
+                            <tr>
+                                {% include '/App/Views/Components/Table/td/link.twig' with {
+                                    'href': '/categories/view/' ~ category.category_id,
+                                    'value': category.category_id,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': category.name,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': category.slug,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/status.twig' with {
+                                    'value': category.visible,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/status.twig' with {
+                                    'value': category.deleted,
+                                } %}
+
+                                {% set buttons = [
+                                    {'icon': 'hs-admin-pencil', 'href': '/categories/view/' ~ category.category_id},
+                                    {'icon': 'hs-admin-unlink', 'href': '/goods-categories/view/' ~ category.good_category_id},
+                                ] %}
+
+                                {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                                    'buttons': buttons
+                                } %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <header>
+                    <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                        Attributes
+                    </h2>
+                </header>
+
+                <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                <div class="">
+                    <table class="table table-responsive-sm w-100">
+
+                        {% include '/App/Views/Components/Table/thead.twig' with {
+                            'columns': ['Name', 'Value'],
+                            'total': params.attrs|length
+                        } %}
+
+                        <tbody>
+                        {% for attr in params.attrs %}
+                            <tr>
+                                {% include '/App/Views/Components/Table/td/link.twig' with {
+                                    'href': '/attrs/view/' ~ attr.attr_id,
+                                    'value': attr.attr_id,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': attr.name,
+                                } %}
+
+                                {% if (attr.type == 'int' or attr.type == 'string' or attr.type == 'float') %}
+                                    {% set value = attr['ga_value_' ~ attr.type] %}
+                                {% elseif (attr.type == 'table') %}
+                                    {% set value = attr['ga_value_int'] %}
+                                {% elseif (attr.type == 'ref') %}
+                                    {% for k, v in params.references|filter(v => v.reference_value_id == attr.ga_value_int) -%}
+                                        {% if (v.type == 'ref') %}
+                                            {% set value = v['rv2_value_' ~ v.r2_type] %}
+                                        {% else %}
+                                            {% set value = v['value_' ~ v.type] %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': value,
+                                } %}
+
+                                {% set buttons = [
+                                    {'icon': 'hs-admin-pencil', 'href': '/categories/edit/' ~ attr.attr_id},
+                                    {'icon': 'hs-admin-unlink', 'href': '/goods-attrs/delete/' ~ attr.good_attr_id},
+                                ] %}
+
+                                {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                                    'buttons': buttons
+                                } %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

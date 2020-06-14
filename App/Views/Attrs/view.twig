@@ -1,0 +1,107 @@
+{% set reference_id = data.model.reference_id %}
+{% if reference_id is not defined or reference_id == null %}
+    {% set value_url = '#' %}
+{% else %}
+    {% set value_url = '/references/view/' ~ reference_id %}
+{% endif %}
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate" name="attr">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/attrs" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Attribute #{{ data.model.attr_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'name',
+                        'model': 'attr',
+                        'value': data.model.name,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'slug',
+                        'model': 'attr',
+                        'value': data.model.slug,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/textarea.twig' with {
+                        'id': 'description',
+                        'model': 'attr',
+                        'value': data.model.description,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'type',
+                        'model': 'attr',
+                        'value': data.model.type,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'round',
+                        'model': 'attr',
+                        'value': data.model.round,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'reference_name',
+                        'model': 'attr',
+                        'value': data.model.reference_name,
+                        'value_url': value_url,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'table_name',
+                        'model': 'attr',
+                        'value': data.model.table_name,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'attr',
+                        'value': data.model.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'attr',
+                        'value': data.model.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 1
+                    } %}
+
+                    <a href="/attrs/edit/{{ data.model.attr_id }}"
+                       class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Edit
+                    </a>
+                </form>
+            </div>
+        </div>
+
+        {% include '/App/Views/Attrs/attrs_categories.twig' with {
+            'categories': params.categories
+        } %}
+
+    </div>
+</div>

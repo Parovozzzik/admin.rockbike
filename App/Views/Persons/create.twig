@@ -1,0 +1,75 @@
+<div class="g-pa-20">
+    <div class="row">
+        {{ include ('/App/Views/Users/sidebar.twig', {user:data.model}) }}
+
+        <div class="col-md-9">
+            <div class="h-100 g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form action="/persons/{{ params.request.person_id != null ? 'edit' : 'create' }}" method="post" class="js-validate" novalidate="novalidate" name="person">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            General information
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'first_name',
+                        'model': 'person',
+                        'value': params.request.first_name,
+                        'error': data.errors.first_name|length > 0 ? data.errors.first_name : 0,
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'last_name',
+                        'model': 'person',
+                        'value': params.request.last_name,
+                        'error': data.errors.last_name|length > 0 ? data.errors.last_name : 0,
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/datepicker.twig' with {
+                        'id': 'date_birth',
+                        'model': 'person',
+                        'value': params.request.date_birth,
+                        'error': data.errors.date_birth|length > 0 ? data.errors.date_birth : 0,
+                    } %}
+
+                    <div class="row g-mb-20">
+                        <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+                            <label class="mb-0" for="gender">Gender</label>
+                        </div>
+
+                        <div class="col-md-9 align-self-center">
+                            <div class="btn-group justified-content">
+                                <label class="u-check">
+                                    <input class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" name="person[gender]" {{ params.request.gender == 'male' ? 'checked' : '' }} value="male" type="radio">
+                                    <span class="btn btn-md btn-block u-btn-outline-lightgray g-color-white--checked g-bg-primary--checked rounded-0">Male</span>
+                                </label>
+                                <label class="u-check">
+                                    <input class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" name="person[gender]" {{ params.request.gender == 'female' ? 'checked' : '' }} value="female" type="radio">
+                                    <span class="btn btn-md btn-block u-btn-outline-lightgray g-color-white--checked g-bg-primary--checked g-brd-left-none--md rounded-0">Female</span>
+                                </label>
+                            </div>
+                            {% if data.errors.gender|length > 0 %}
+                                <small class="g-font-weight-300 g-font-size-12 g-color-red g-pt-5">
+                                    {{ data.errors.gender }}
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% include '/App/Views/Components/Inputs/textarea.twig' with {
+                        'id': 'hobbies',
+                        'model': 'person',
+                        'value': params.request.hobbies,
+                        'error': data.errors.hobbies|length > 0 ? data.errors.hobbies : 0,
+                    } %}
+
+                    <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

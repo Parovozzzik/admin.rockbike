@@ -1,0 +1,17 @@
+{% if font_size is not defined %}
+    {% set font_size = '14' %}
+{% endif %}
+<td class="g-valign-middle g-brd-top-none g-brd-bottom g-brd-gray-light-v7 g-pr-25">
+    <div class="d-flex align-items-center g-line-height-1">
+        {% for button in buttons %}
+            <a class="btn btn-xs u-btn-outline-darkgray g-mr-10" href="{{ button.href }}"
+               {% if button.onclick|length > 0 %}
+               onclick="return confirm('{{ button.onclick }}');"
+               {% endif %}
+            >
+                <i class="{{ button.icon }} g-font-size-{{ font_size }}"></i>
+                {{ button.text }}
+            </a>
+        {% endfor %}
+    </div>
+</td>

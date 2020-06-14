@@ -1,0 +1,24 @@
+{% if disabled is not defined %}
+    {% set disabled = 0 %}
+{% endif %}
+{% if error is not defined %}
+    {% set error = 0 %}
+{% endif %}
+
+<div class="row g-mb-20">
+    <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+        <label class="mb-0" for="{{ id }}">{{ id|capitalize|replace({'_':' '}) }}</label>
+    </div>
+    <div class="col-md-9 align-self-center">
+        <textarea id="{{ id }}" rows="3" name="{{ model }}[{{ id }}]"
+                  class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4"
+                  {{ (disabled == 1) ? 'disabled="disabled"' : '' }}>{{ value }}</textarea>
+        {% if error != 0 %}
+            {% for item in error %}
+                <small class="g-font-weight-300 g-font-size-12 g-color-red g-pt-5">
+                    {{ item }}
+                </small>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<tr id="goods-categories-{{ good_category.good_category_id }}" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/goods-categories/view/' ~ good_category.good_category_id,
+        'value': good_category.good_category_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/goods/view/' ~ good_category.good_id,
+        'value': good_category.good_name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/categories/view/' ~ good_category.category_id,
+        'value': good_category.category_name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': good_category.is_main,
+        'text_enabled': 'Main',
+        'text_disabled': 'Secondary',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-trash', 'href': '/goods-categories/delete/' ~ good_category.good_category_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

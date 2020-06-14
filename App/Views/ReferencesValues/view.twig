@@ -1,0 +1,79 @@
+{% set reference_id = data.model.reference_id %}
+{% if reference_id is not defined or reference_id == null %}
+    {% set value_url = '#' %}
+{% else %}
+    {% set value_url = '/references/view/' ~ reference_id %}
+{% endif %}
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate" name="reference_value">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/references-values" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Reference value #{{ data.model.reference_value_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'reference_name',
+                        'model': 'reference_value',
+                        'value': data.model.r_name ~ ' (' ~ data.model.r_type ~ ')',
+                        'value_url': value_url,
+                        'disabled': 1
+                    } %}
+
+                    {% if data.model.r_type == 'int' or data.model.r_type == 'string' or data.model.r_type == 'text' %}
+                        {% include '/App/Views/Components/Inputs/text.twig' with {
+                            'id': 'value_' ~ data.model.r_type,
+                            'model': 'reference_value',
+                            'value': data.model['value_' ~ data.model.r_type],
+                            'disabled': 1
+                        } %}
+                    {% endif %}
+
+                    {% if data.model.r_type == 'ref' %}
+                        {% include '/App/Views/Components/Inputs/text.twig' with {
+                            'id': 'value_int',
+                            'model': 'reference_value',
+                            'value': data.model['rv2_value_' ~ data.model.r2_type],
+                            'disabled': 1
+                        } %}
+                    {% endif %}
+
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'reference_value',
+                        'value': data.model.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'reference_value',
+                        'value': data.model.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 1
+                    } %}
+
+                    <a href="/references-values/edit/{{ data.model.reference_value_id }}"
+                       class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13">
+                        Edit
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

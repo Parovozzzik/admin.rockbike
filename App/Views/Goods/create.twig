@@ -1,0 +1,222 @@
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form action="/goods/{{ params.request.good_id != null ? ('edit/' ~ params.request.good_id) : 'create' }}"
+                      method="post" class="js-validate" novalidate="novalidate" name="good">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/goods" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Good #{{ params.request.good_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'name',
+                        'model': 'good',
+                        'value': params.request.name,
+                        'error': data.errors.name|length > 0 ? data.errors.name : 0,
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'slug',
+                        'model': 'good',
+                        'value': params.request.slug,
+                        'error': data.errors.slug|length > 0 ? data.errors.slug : 0,
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/textarea.twig' with {
+                        'id': 'description',
+                        'model': 'good',
+                        'value': params.request.description,
+                        'error': data.errors.description|length > 0 ? data.errors.description : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'price',
+                        'model': 'good',
+                        'value': params.request.price,
+                        'error': data.errors.price|length > 0 ? data.errors.price : 0,
+                        'type': 'number',
+                        'step': '0.01',
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'good',
+                        'value': params.request.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'good',
+                        'value': params.request.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 0
+                    } %}
+
+                    <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <header>
+                    <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                        Categories
+                    </h2>
+                </header>
+
+                <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                <div class="">
+                    <table class="table table-responsive-sm w-100">
+                        <thead>
+                            <tr>
+                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none g-pl-20">#</th>
+                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Name</th>
+                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Slug</th>
+                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Visible</th>
+                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Deleted</th>
+                                <th class="text-right g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in params.categories %}
+                            <tr>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10 g-pl-20">
+                                    {{ category.category_id }}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {{ category.name }}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {{ category.slug }}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {% if (category.deleted == 0) %}
+                                        <span class="g-hidden-sm-down text-center g-width-30--md g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
+                                        </span>
+                                    {% else %}
+                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {% if (category.deleted == 1) %}
+                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
+                                        </span>
+                                    {% else %}
+                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    <div class="d-flex align-items-center g-line-height-1">
+                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover g-mr-15" href="/categories/view/{{ category.category_id }}">
+                                            <i class="hs-admin-pencil g-font-size-18"></i>
+                                        </a>
+                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover" href="/goods-categories/view/{{ category.good_category_id }}">
+                                            <i class="hs-admin-unlink g-font-size-18"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <header>
+                    <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                        Attributes
+                    </h2>
+                </header>
+
+                <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                <div class="">
+                    <table class="table table-responsive-sm w-100">
+                        <thead>
+                        <tr>
+                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none g-pl-20">#</th>
+                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Name</th>
+                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Slug</th>
+                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Visible</th>
+                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Deleted</th>
+                            <th class="text-right g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in params.categories %}
+                            <tr>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10 g-pl-20">
+                                    {{ category.category_id }}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {{ category.name }}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {{ category.slug }}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {% if (category.deleted == 0) %}
+                                        <span class="g-hidden-sm-down text-center g-width-30--md g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
+                                        </span>
+                                    {% else %}
+                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    {% if (category.deleted == 1) %}
+                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
+                                        </span>
+                                    {% else %}
+                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+                                    <div class="d-flex align-items-center g-line-height-1">
+                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover g-mr-15" href="/categories/view/{{ category.category_id }}">
+                                            <i class="hs-admin-pencil g-font-size-18"></i>
+                                        </a>
+                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover" href="/goods-categories/view/{{ category.good_category_id }}">
+                                            <i class="hs-admin-unlink g-font-size-18"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

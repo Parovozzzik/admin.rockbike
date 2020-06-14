@@ -1,0 +1,42 @@
+<tr id="contact-1-header" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/categories/view/' ~ category.category_id,
+        'value': category.category_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': category.name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': category.slug,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/categories/view/' ~ category.parent_category_id,
+        'value': category.parent_category_name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': category.visible,
+        'text_enabled': 'Visible',
+        'text_disabled': 'Not visible',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': category.deleted,
+        'text_enabled': 'Deleted',
+        'text_disabled': 'Not deleted',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/categories/edit/' ~ category.category_id},
+        {'icon': 'hs-admin-trash', 'href': '/categories/delete/' ~ category.category_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

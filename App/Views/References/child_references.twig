@@ -1,0 +1,53 @@
+<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+    <header>
+        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+            Child References
+        </h2>
+    </header>
+
+    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+    <div class="">
+
+        <table class="table table-responsive-sm w-100">
+
+            {% include '/App/Views/Components/Table/thead.twig' with {
+                'columns': ['Names', 'Visible', 'Deleted'],
+                'total': childs|length
+            } %}
+
+            <tbody>
+            {% for child in childs %}
+                <tr>
+
+                    {% include '/App/Views/Components/Table/td/link.twig' with {
+                        'href': '/references/view/' ~ child.reference_id,
+                        'value': child.reference_id,
+                    } %}
+
+                    {% include '/App/Views/Components/Table/td/text.twig' with {
+                        'value': child.name,
+                    } %}
+
+                    {% include '/App/Views/Components/Table/td/status.twig' with {
+                        'value': child.visible,
+                    } %}
+
+                    {% include '/App/Views/Components/Table/td/status.twig' with {
+                        'value': child.deleted,
+                    } %}
+
+                    {% set buttons = [
+                        {'icon': 'hs-admin-pencil', 'href': '/references/edit/' ~ child.reference_id},
+                    ] %}
+
+                    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                        'buttons': buttons
+                    } %}
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

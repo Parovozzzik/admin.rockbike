@@ -1,0 +1,42 @@
+<div class="g-pa-20">
+    <h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-28">Login</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="/users/login" method="post" name="user"
+                  class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md g-mb-30">
+
+                {% include '/App/Views/Components/Inputs/text.twig' with {
+                    'id': 'email',
+                    'model': 'user',
+                    'value': params.request.email,
+                    'error': data.errors.email|length > 0 ? data.errors.email : 0
+                } %}
+
+                {% include '/App/Views/Components/Inputs/text.twig' with {
+                    'id': 'password',
+                    'model': 'user',
+                    'value': params.request.password,
+                    'error': data.errors.password|length > 0 ? data.errors.password : 0,
+                    'type': 'password'
+                } %}
+
+                {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                    'id': 'remember',
+                    'model': 'user',
+                    'value': params.request.remember,
+                    'text_yes': 'Remember',
+                    'text_no': 'Not remember',
+                    'disabled': 0
+                } %}
+
+                <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                    Login
+                </button>
+
+                <a href="/users/registration" class="btn btn-md btn-block u-btn-outline-blue rounded text-uppercase g-py-13">
+                    Registration
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

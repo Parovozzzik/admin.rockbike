@@ -1,0 +1,85 @@
+{% set reference_id = data.model.reference_id %}
+{% if reference_id is not defined or reference_id == null %}
+    {% set value_url = '#' %}
+{% else %}
+    {% set value_url = '/references/view/' ~ reference_id %}
+{% endif %}
+
+
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate" name="good_attr">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/goods-attrs" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Good Attr #{{ data.model.good_attr_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% set good_url = '/goods/view/' ~ data.model.good_id %}
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'good_name',
+                        'model': 'good_attr',
+                        'value': data.model.good_name,
+                        'value_url': good_url,
+                        'disabled': 1
+                    } %}
+
+                    {% set attr_url = '/attrs/view/' ~ data.model.attr_id %}
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'attr_name',
+                        'model': 'good_attr',
+                        'value': data.model.attr_name,
+                        'value_url': attr_url,
+                        'disabled': 1
+                    } %}
+
+                    {% if data.model.attr_type == 'int' or data.model.attr_type == 'string' or data.model.attr_type == 'text' %}
+                        {% include '/App/Views/Components/Inputs/text.twig' with {
+                            'id': 'value_' ~ data.model.type,
+                            'model': 'good_attr',
+                            'value': data.model['value_' ~ data.model.type],
+                            'disabled': 1
+                        } %}
+                    {% elseif (data.model.attr_type == 'ref') %}
+                        {% if (data.model.ref_type == 'ref') %}
+                            {% set value = data.model['parent_ref_value_' ~ data.model.parent_ref_type] %}
+                        {% else %}
+                            {% set value = data.model['ref_value_' ~ data.model.ref_type] %}
+                        {% endif %}
+
+                        {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                            'id': 'value_int',
+                            'model': 'good_attr',
+                            'value': value,
+                            'value_url': '/references-values/view/' ~ data.model.value_int,
+                            'disabled': 1
+                        } %}
+
+                        {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                            'id': 'ref_name',
+                            'model': 'good_attr',
+                            'value': data.model.ref_name,
+                            'value_url': '/references/view/' ~ data.model.attr_ref_id,
+                            'disabled': 1
+                        } %}
+                    {% endif %}
+
+                    <a href="/goods-attrs/edit/{{ data.model.good_attr_id }}"
+                       class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13">
+                        Edit
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

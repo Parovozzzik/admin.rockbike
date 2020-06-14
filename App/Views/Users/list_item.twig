@@ -1,0 +1,42 @@
+<tr id="contact-1-header" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/users/view/' ~ user.user_id,
+        'value': user.user_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': 'mailto:' ~ user.email,
+        'value': user.email,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': user.created_at,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': user.updated_at,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': user.email_confirm,
+        'text_enabled': 'Confirmed',
+        'text_disabled': 'Not confirmed',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': user.deleted,
+        'text_enabled': 'Deleted',
+        'text_disabled': 'Not deleted',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/users/edit/' ~ user.user_id},
+        {'icon': 'hs-admin-trash', 'href': '/users/delete/' ~ user.user_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

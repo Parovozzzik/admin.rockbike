@@ -1,0 +1,84 @@
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form action="/categories/{{ params.request.category_id != null ? ('edit/' ~ params.request.category_id) : 'create' }}"
+                      method="post" class="js-validate" novalidate="novalidate" name="category">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/categories" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Category #{{ params.request.category_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    <input id="category_id" name="category[category_id]" type="hidden" value="{{ params.request.category_id }}"/>
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'name',
+                        'model': 'category',
+                        'value': params.request.name,
+                        'error': data.errors.name|length > 0 ? data.errors.name : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'slug',
+                        'model': 'category',
+                        'value': params.request.slug,
+                        'error': data.errors.slug|length > 0 ? data.errors.slug : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/textarea.twig' with {
+                        'id': 'description',
+                        'model': 'category',
+                        'value': params.request.description,
+                        'error': data.errors.description|length > 0 ? data.errors.description : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'parent_category_id',
+                        'model': 'category',
+                        'value': params.request.parent_category_id,
+                        'values': params.parent_category,
+                        'value_exclude': params.request.category_id,
+                        'error': data.errors.parent_category_id|length > 0 ? data.errors.parent_category_id : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'category',
+                        'value': params.request.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'category',
+                        'value': params.request.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 0
+                    } %}
+
+                    <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if params.request.category_id != null %}
+            {% include '/App/Views/Categories/attrs_categories.twig' with {
+                'attrs': params.attrs
+            } %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form action="/references/{{ params.request.reference_id != null ? ('edit/' ~ params.request.reference_id) : 'create' }}"
+                      method="post" class="js-validate" novalidate="novalidate" name="reference">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/references" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Attribute #{{ params.request.reference_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    <input id="reference_id" name="reference[reference_id]" type="hidden" value="{{ params.request.reference_id }}"/>
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'name',
+                        'model': 'reference',
+                        'value': params.request.name,
+                        'error': data.errors.name|length > 0 ? data.errors.name : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'slug',
+                        'model': 'reference',
+                        'value': params.request.slug,
+                        'error': data.errors.slug|length > 0 ? data.errors.slug : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'type',
+                        'model': 'reference',
+                        'value': params.request.type,
+                        'values': params.types,
+                        'error': data.errors.type|length > 0 ? data.errors.type : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'parent_reference_id',
+                        'model': 'reference',
+                        'value': params.request.parent_reference_id,
+                        'values': params.parent_reference,
+                        'value_exclude': params.request.reference_id,
+                        'error': data.errors.parent_reference_id|length > 0 ? data.errors.parent_reference_id : 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'reference',
+                        'value': params.request.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 0
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'reference',
+                        'value': params.request.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 0
+                    } %}
+
+                    <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if params.request.reference_id != null %}
+            <div class="col-md-6">
+                {% include '/App/Views/References/references_values.twig' with {
+                    'values': params.values
+                } %}
+            </div>
+        {% endif %}
+    </div>
+</div>

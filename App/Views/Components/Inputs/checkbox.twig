@@ -1,0 +1,62 @@
+{% if disabled is not defined %}
+    {% set disabled = 0 %}
+{% endif %}
+{% if error is not defined %}
+    {% set error = 0 %}
+{% endif %}
+
+{% if disabled == 1 %}
+    <div class="row g-mb-20">
+        <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+            <label class="mb-0" for="{{ id }}">{{ id|capitalize|replace({'_':' '}) }}</label>
+        </div>
+
+        <div class="col-md-4 align-self-center">
+            <div class="form-group g-pos-rel mb-0">
+                <label class="form-check-inline u-check">
+                    {% if (value == 1) %}
+                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
+                        </span>
+                        {{ text_yes }}
+                    {% else %}
+                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
+                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
+                        </span>
+                        {{ text_no }}
+                    {% endif %}
+                </label>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="row g-mb-20">
+        <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+            <label class="mb-0" for="{{ id }}">{{ id|capitalize|replace({'_':' '}) }}</label>
+        </div>
+
+        <div class="col-md-4 align-self-center">
+            <div class="form-group g-pos-rel mb-0">
+                <label class="form-check-inline u-check g-pl-25">
+                    <input class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0"
+                           type='hidden' {{ value == 1 ? 'checked' : '' }} value='0'
+                           name="{{ model }}[{{ id }}]">
+                    <input class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0"
+                           type='checkbox' {{ value == 1 ? 'checked' : '' }} value='1'
+                           name="{{ model }}[{{ id }}]">
+                    <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
+                        <i class="fa" data-check-icon="" data-uncheck-icon=""></i>
+                    </div>
+                    {{ id|capitalize|replace({'_':' '}) }}
+                </label>
+                {% if error != 0 %}
+                    {% for item in error %}
+                        <small class="g-font-weight-300 g-font-size-12 g-color-red g-pt-5">
+                            {{ item }}
+                        </small>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}

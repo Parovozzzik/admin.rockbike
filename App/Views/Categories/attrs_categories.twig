@@ -1,0 +1,59 @@
+<div class="col-md-6">
+    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+        <header>
+            <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                Attributes
+            </h2>
+        </header>
+
+        <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+        <div class="">
+            <table class="table table-responsive-sm w-100">
+
+                {% include '/App/Views/Components/Table/thead.twig' with {
+                    'columns': ['Name', 'Slug', 'Visible', 'Deleted'],
+                    'total': attrs|length
+                } %}
+
+                <tbody>
+                {% for attr in attrs %}
+                    <tr>
+
+                        {% include '/App/Views/Components/Table/td/link.twig' with {
+                            'href': '/attrs/view/' ~ attr.attr_id,
+                            'value': attr.attr_id,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/text.twig' with {
+                            'value': attr.name,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/text.twig' with {
+                            'value': attr.slug,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/status.twig' with {
+                            'value': attr.visible,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/status.twig' with {
+                            'value': attr.deleted,
+                        } %}
+
+                        {% set buttons = [
+                            {'icon': 'hs-admin-pencil', 'href': '/attrs/edit/' ~ attr.attr_id},
+                            {'icon': 'hs-admin-unlink', 'href': '/attrs-categories/view/' ~ attr.attr_category_id},
+                        ] %}
+
+                        {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                            'buttons': buttons
+                        } %}
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

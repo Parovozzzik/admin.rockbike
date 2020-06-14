@@ -1,0 +1,19 @@
+{% for message in data.messages %}
+    <script type="application/javascript">
+        var newNoty = new Noty({
+            "type": "{{ message.status }}",
+            "layout": "topRight",
+            "timeout": "5000",
+            "animation": {
+                "open": "animated fadeIn",
+                "close": "animated fadeOut"
+            },
+            "closeWith": [
+                "click",
+                "button"
+            ],
+            "text": "<div class=\"g-mr-20\"><div class=\"noty_body__icon\"><i class=\"{{ message.icon }}\"></i></div></div><div>{{ message.message }}</div>",
+            "theme": "unify--v1"
+        }).show();
+    </script>
+{% endfor %}

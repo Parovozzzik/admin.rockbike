@@ -1,0 +1,13 @@
+<td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
+    {% if (value == 1) %}
+        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-10">
+            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
+        </span>
+        {{ text_enabled }}
+    {% else %}
+        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-10">
+            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
+        </span>
+        {{ text_disabled }}
+    {% endif %}
+</td>

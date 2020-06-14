@@ -1,0 +1,27 @@
+<div class="g-pa-20">
+    <div class="media">
+        <div class="d-flex align-self-center">
+            <h1 class="g-font-weight-300 g-font-size-28 g-color-black mb-0">Persons</h1>
+        </div>
+    </div>
+
+    <hr class="d-flex g-brd-gray-light-v7 g-my-30">
+
+    <table class="table w-100 g-mb-25">
+
+        {% include '/App/Views/Components/Table/thead.twig' with {
+            'columns': ['First Name', 'Last Name', 'Date Birth', 'Gender'],
+            'total': params.pager.total
+        } %}
+
+        <tbody class="g-font-size-default g-color-black" id="accordion-09" role="tablist" aria-multiselectable="true">
+            {% for person in data.models %}
+                {{ include ('/App/Views/Persons/list_item.twig', {person: person}) }}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+

@@ -1,0 +1,73 @@
+<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+    <header>
+        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+            Reference values
+        </h2>
+    </header>
+
+    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+    <div class="">
+
+        <table class="table table-responsive-sm w-100">
+
+            {% set columns = [values[0].r_type|capitalize] %}
+            {% if values.0.r_type == 'ref' %}
+                {% set columns = columns|merge(['Ref Value']) %}
+            {% endif %}
+            {% set columns = columns|merge(['Visible', 'Deleted']) %}
+
+
+            {% include '/App/Views/Components/Table/thead.twig' with {
+                'columns': columns,
+                'total': values|length
+            } %}
+
+            <tbody>
+            {% for value in values %}
+                <tr>
+
+                    {% include '/App/Views/Components/Table/td/link.twig' with {
+                        'href': '/references-values/view/' ~ value.reference_value_id,
+                        'value': value.reference_value_id,
+                    } %}
+
+                    {% if value.r_type == 'int' or value.r_type == 'string' or value.r_type == 'text' %}
+                        {% include '/App/Views/Components/Table/td/text.twig' with {
+                            'value': value['value_' ~ value.r_type],
+                        } %}
+                    {% endif %}
+
+                    {% if value.r_type == 'ref' %}
+                        {% include '/App/Views/Components/Table/td/link.twig' with {
+                            'href': '/references-values/view/' ~ value.value_int,
+                            'value': value.value_int,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/text.twig' with {
+                            'value': value['rv2_value_' ~ value.r2_type],
+                        } %}
+                    {% endif %}
+
+                    {% include '/App/Views/Components/Table/td/status.twig' with {
+                        'value': value.visible,
+                    } %}
+
+                    {% include '/App/Views/Components/Table/td/status.twig' with {
+                        'value': value.deleted,
+                    } %}
+
+                    {% set buttons = [
+                        {'icon': 'hs-admin-pencil', 'href': '/references-values/edit/' ~ value.reference_value_id},
+                    ] %}
+
+                    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                        'buttons': buttons
+                    } %}
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

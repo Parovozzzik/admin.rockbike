@@ -1,0 +1,41 @@
+<tr id="contact-1-header" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/references/view/' ~ reference.reference_id,
+        'value': reference.reference_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': reference.name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': reference.slug,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': reference.type,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': reference.visible,
+        'text_enabled': 'Visible',
+        'text_disabled': 'Not visible',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': reference.deleted,
+        'text_enabled': 'Deleted',
+        'text_disabled': 'Not deleted',
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-pencil', 'href': '/references/edit/' ~ reference.reference_id},
+        {'icon': 'hs-admin-trash', 'href': '/references/delete/' ~ reference.reference_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

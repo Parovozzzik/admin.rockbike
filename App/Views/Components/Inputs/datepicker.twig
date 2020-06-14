@@ -1,0 +1,39 @@
+{% if disabled is not defined %}
+    {% set disabled = 0 %}
+{% endif %}
+{% if error is not defined %}
+    {% set error = 0 %}
+{% endif %}
+{% if format is not defined %}
+    {% set format = 'Y.m.d' %}
+{% endif %}
+
+<div class="row g-mb-20">
+    <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+        <label class="mb-0" for="{{ id }}">{{ id|capitalize|replace({'_':' '}) }}</label>
+    </div>
+
+    <div class="col-md-9 align-self-center">
+        <div class="form-group g-pos-rel mb-0">
+            <span class="g-pos-abs g-top-0 g-right-0 d-block g-width-40 h-100 opacity-0 g-opacity-1--success">
+                <i class="hs-admin-check g-absolute-centered g-font-size-default g-color-secondary"></i>
+            </span>
+            <div id="datepicker" class="u-datepicker-right u-datepicker--v3 g-pos-rel w-100 g-cursor-pointer g-brd-around g-brd-gray-light-v7 g-rounded-4">
+                <input class="js-range-datepicker w-100 g-bg-transparent g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-pr-80 g-pl-15 g-py-9"
+                       type="text" name="{{ model }}[{{ id }}]" id="{{ id }}" placeholder="Select Date" data-rp-wrapper="#datepicker" data-rp-date-format="{{ format }}"
+                       value="{{ value }}">
+                <div class="d-flex align-items-center g-absolute-centered--y g-right-0 g-color-gray-light-v6 g-color-lightblue-v9--sibling-opened g-mr-15">
+                    <i class="hs-admin-calendar g-font-size-18 g-mr-10"></i>
+                    <i class="hs-admin-angle-down"></i>
+                </div>
+            </div>
+            {% if error != 0 %}
+                {% for item in error %}
+                    <small class="g-font-weight-300 g-font-size-12 g-color-red g-pt-5">
+                        {{ item }}
+                    </small>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
