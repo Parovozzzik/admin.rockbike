@@ -2,31 +2,29 @@
 
 namespace App\Models\Entities;
 
-use App\Models\Category;
+use App\Models\Image;
 
 /**
- * Class ECategory
+ * Class EImage
  * @package App\Models\Entities
  *
- * @property integer $category_id
- * @property string $name
- * @property string $slug
+ * @property integer $image_id
+ * @property string $path
  * @property string $description
- * @property string $parent_category_id
  *
  * @property integer $visible
  * @property integer $deleted
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
  */
-class ECategory extends Entity
+class EImage extends Entity
 {
     /** @var string */
-    protected static $mapper = Category::class;
+    protected static $mapper = Image::class;
     /** @var string */
-    public static $table = 'rb_categories';
+    public static $table = 'rb_images';
     /** @var string */
-    public static $idColumn = 'category_id';
+    public static $idColumn = 'image_id';
 
     /**
      * @return array
@@ -35,11 +33,9 @@ class ECategory extends Entity
     public static function fields()
     {
         return [
-            'category_id' => ['type' => 'integer', 'primary' => true, 'autoincrement' => true],
-            'name' => ['type' => 'string', 'required' => true],
-            'slug' => ['type' => 'string', 'required' => true],
+            'image_id' => ['type' => 'integer', 'primary' => true, 'autoincrement' => true],
+            'path' => ['type' => 'string', 'required' => true],
             'description' => ['type' => 'string'],
-            'parent_category_id' => ['type' => 'integer', 'default' => null],
             'visible' => ['type' => 'integer', 'default' => 0, 'required' => true],
             'deleted' => ['type' => 'integer', 'default' => 0, 'required' => true],
             'created_at' => ['type' => 'datetime', 'value' => new \DateTime()],

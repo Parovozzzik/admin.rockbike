@@ -16,8 +16,8 @@ use App\Models\ReferenceValue;
  *
  * @property integer $visible
  * @property integer $deleted
- * @property integer $created_at
- * @property integer $updated_at
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  */
 class EReferenceValue extends Entity
 {

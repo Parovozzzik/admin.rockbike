@@ -182,7 +182,7 @@ class GoodsController extends Controller
      * @param EGood $good
      * @param Response $response
      */
-    protected function save(EGood $good, Response &$response): void
+    protected function save(EGood $good, Response $response): void
     {
         try {
             $result = $this->mainModel->save($good);
@@ -214,7 +214,7 @@ class GoodsController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function validate(EGood $good, array &$request, Response &$response): void
+    protected function validate(EGood $good, array &$request, Response $response): void
     {
         if (isset($request['price']) && trim($request['price'] === '')) {
             $request['price'] = null;

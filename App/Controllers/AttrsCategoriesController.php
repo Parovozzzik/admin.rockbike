@@ -158,7 +158,7 @@ class AttrsCategoriesController extends Controller
      * @param EAttrCategory $attrCategory
      * @param Response $response
      */
-    protected function save(EAttrCategory $attrCategory, Response &$response): void
+    protected function save(EAttrCategory $attrCategory, Response $response): void
     {
         try {
             $result = $this->mainModel->save($attrCategory);
@@ -191,7 +191,7 @@ class AttrsCategoriesController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function validate(EAttrCategory $attrCategory, array &$request, Response &$response): void
+    protected function validate(EAttrCategory $attrCategory, array &$request, Response $response): void
     {
         $attrCategory->data($request);
 

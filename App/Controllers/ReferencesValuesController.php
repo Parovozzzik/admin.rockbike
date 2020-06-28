@@ -205,7 +205,7 @@ class ReferencesValuesController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function save(EReferenceValue $referenceValue, Response &$response): void
+    protected function save(EReferenceValue $referenceValue, Response $response): void
     {
         try {
             $result = $this->mainModel->save($referenceValue);
@@ -238,7 +238,7 @@ class ReferencesValuesController extends Controller
      * @param Response $response
      * @throws \App\Settings\Exceptions\DatabaseException
      */
-    protected function validate(EReferenceValue $referenceValue, array &$request, Response &$response): void
+    protected function validate(EReferenceValue $referenceValue, array &$request, Response $response): void
     {
         $referencesModel = Reference::getModel(EReference::class);
         /** @var EReference $reference */

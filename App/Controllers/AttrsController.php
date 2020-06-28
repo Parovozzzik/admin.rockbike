@@ -242,7 +242,7 @@ class AttrsController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function save(EAttr $attr, Response &$response): void
+    protected function save(EAttr $attr, Response $response): void
     {
         try {
             $result = $this->mainModel->save($attr);
@@ -274,7 +274,7 @@ class AttrsController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function validate(EAttr $attr, array &$request, Response &$response): void
+    protected function validate(EAttr $attr, array &$request, Response $response): void
     {
         if (!in_array($request['type'], EAttr::ATTR_TYPES)) {
             $attrTypesString = implode(', ', EAttr::ATTR_TYPES);

@@ -210,7 +210,7 @@ class GoodsCategoriesController extends Controller
      * @param Response $response
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function validate(EGoodCategory $goodCategory, array &$request, Response &$response): void
+    protected function validate(EGoodCategory $goodCategory, array &$request, Response $response): void
     {
         $goodCategory->data($request);
 

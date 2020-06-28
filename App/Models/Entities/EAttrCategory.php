@@ -12,7 +12,7 @@ use App\Models\AttrCategory;
  * @property integer $attr_id
  * @property integer $category_id
  * @property integer $required
- * @property integer $created_at
+ * @property \DateTime $created_at
  */
 class EAttrCategory extends Entity
 {
