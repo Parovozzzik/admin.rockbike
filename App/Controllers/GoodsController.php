@@ -141,11 +141,25 @@ class GoodsController extends Controller
         $categoriesModel = Category::getModel(ECategory::class);
         $categories = $categoriesModel->getByGoodId($good->good_id);
 
+        /** @var Attr $attrsModel */
+        $attrsModel = Attr::getModel(EAttr::class);
+        $attrs = $attrsModel->getByGoodId($good->good_id);
+
+        $referencesSlugs = array_filter(array_column($attrs, 'r_slug'), function ($item) {
+            return $item !== null;
+        });
+
+        /** @var Reference $referencesModel */
+        $referencesModel = Reference::getModel(EReference::class);
+        $referencesWithValues = $referencesModel->getBySlugsWithValues($referencesSlugs);
+
         $response->setView('goods.create');
 
         $this->render($response, [
             'request' => $request,
-            'categories' => $categories
+            'categories' => $categories,
+            'attrs' => $attrs,
+            'references' => $referencesWithValues,
         ]);
     }
 

@@ -84,7 +84,7 @@
                     <table class="table table-responsive-sm w-100">
 
                         {% include '/App/Views/Components/Table/thead.twig' with {
-                            'columns': ['Name', 'Slug', 'Visible', 'Deleted'],
+                            'columns': ['Name', 'IsMain'],
                             'total': params.categories|length
                         } %}
 
@@ -100,20 +100,12 @@
                                     'value': category.name,
                                 } %}
 
-                                {% include '/App/Views/Components/Table/td/text.twig' with {
-                                    'value': category.slug,
-                                } %}
-
                                 {% include '/App/Views/Components/Table/td/status.twig' with {
-                                    'value': category.visible,
-                                } %}
-
-                                {% include '/App/Views/Components/Table/td/status.twig' with {
-                                    'value': category.deleted,
+                                    'value': category.is_main,
                                 } %}
 
                                 {% set buttons = [
-                                    {'icon': 'hs-admin-pencil', 'href': '/categories/view/' ~ category.category_id},
+                                    {'icon': 'hs-admin-pencil', 'href': '/categories/edit/' ~ category.category_id},
                                     {'icon': 'hs-admin-unlink', 'href': '/goods-categories/view/' ~ category.good_category_id},
                                 ] %}
 
@@ -175,8 +167,8 @@
                                 } %}
 
                                 {% set buttons = [
-                                    {'icon': 'hs-admin-pencil', 'href': '/categories/edit/' ~ attr.attr_id},
-                                    {'icon': 'hs-admin-unlink', 'href': '/goods-attrs/delete/' ~ attr.good_attr_id},
+                                    {'icon': 'hs-admin-pencil', 'href': '/attrs/edit/' ~ attr.attr_id},
+                                    {'icon': 'hs-admin-unlink', 'href': '/goods-attrs/view/' ~ attr.ga_good_attr_id},
                                 ] %}
 
                                 {% include '/App/Views/Components/Table/td/buttons.twig' with {
