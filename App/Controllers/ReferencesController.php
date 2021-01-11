@@ -244,7 +244,7 @@ class ReferencesController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function save(EReference $reference, Response &$response): void
+    protected function save(EReference $reference, Response $response): void
     {
         try {
             $result = $this->mainModel->save($reference);
@@ -276,7 +276,7 @@ class ReferencesController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function validate(EReference $reference, array &$request, Response &$response): void
+    protected function validate(EReference $reference, array &$request, Response $response): void
     {
         if (!in_array($request['type'], EReference::REF_TYPES)) {
             $referenceTypesString = implode(', ', EReference::REF_TYPES);

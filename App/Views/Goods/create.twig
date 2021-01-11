@@ -18,6 +18,8 @@
 
                     <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
 
+                    <input id="good_id" name="good[good_id]" type="hidden" value="{{ params.request.good_id }}"/>
+
                     {% include '/App/Views/Components/Inputs/text.twig' with {
                         'id': 'name',
                         'model': 'good',
@@ -85,60 +87,36 @@
 
                 <div class="">
                     <table class="table table-responsive-sm w-100">
-                        <thead>
-                            <tr>
-                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none g-pl-20">#</th>
-                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Name</th>
-                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Slug</th>
-                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Visible</th>
-                                <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Deleted</th>
-                                <th class="text-right g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none"></th>
-                            </tr>
-                        </thead>
+
+                        {% include '/App/Views/Components/Table/thead.twig' with {
+                            'columns': ['Name', 'IsMain'],
+                            'total': params.categories|length
+                        } %}
+
                         <tbody>
                         {% for category in params.categories %}
                             <tr>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10 g-pl-20">
-                                    {{ category.category_id }}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {{ category.name }}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {{ category.slug }}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {% if (category.deleted == 0) %}
-                                        <span class="g-hidden-sm-down text-center g-width-30--md g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
-                                        </span>
-                                    {% else %}
-                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {% if (category.deleted == 1) %}
-                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
-                                        </span>
-                                    {% else %}
-                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    <div class="d-flex align-items-center g-line-height-1">
-                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover g-mr-15" href="/categories/view/{{ category.category_id }}">
-                                            <i class="hs-admin-pencil g-font-size-18"></i>
-                                        </a>
-                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover" href="/goods-categories/view/{{ category.good_category_id }}">
-                                            <i class="hs-admin-unlink g-font-size-18"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                {% include '/App/Views/Components/Table/td/link.twig' with {
+                                    'href': '/categories/view/' ~ category.category_id,
+                                    'value': category.category_id,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': category.name,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/status.twig' with {
+                                    'value': category.is_main,
+                                } %}
+
+                                {% set buttons = [
+                                    {'icon': 'hs-admin-pencil', 'href': '/categories/edit/' ~ category.category_id},
+                                    {'icon': 'hs-admin-unlink', 'href': '/goods-categories/view/' ~ category.good_category_id},
+                                ] %}
+
+                                {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                                    'buttons': buttons
+                                } %}
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -157,60 +135,49 @@
 
                 <div class="">
                     <table class="table table-responsive-sm w-100">
-                        <thead>
-                        <tr>
-                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none g-pl-20">#</th>
-                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Name</th>
-                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Slug</th>
-                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Visible</th>
-                            <th class="g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none">Deleted</th>
-                            <th class="text-right g-font-weight-300 g-color-gray-dark-v6 g-brd-top-none"></th>
-                        </tr>
-                        </thead>
+
+                        {% include '/App/Views/Components/Table/thead.twig' with {
+                            'columns': ['Name', 'Value'],
+                            'total': params.attrs|length
+                        } %}
+
                         <tbody>
-                        {% for category in params.categories %}
+                        {% for attr in params.attrs %}
                             <tr>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10 g-pl-20">
-                                    {{ category.category_id }}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {{ category.name }}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {{ category.slug }}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {% if (category.deleted == 0) %}
-                                        <span class="g-hidden-sm-down text-center g-width-30--md g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
-                                        </span>
-                                    {% else %}
-                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    {% if (category.deleted == 1) %}
-                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green"></span>
-                                        </span>
-                                    {% else %}
-                                        <span class="g-hidden-sm-down text-center g-width-50--sm g-brd-around g-font-size-default g-color-gray-dark-v6 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3"></span>
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td class="g-font-size-default g-color-black g-valign-middle g-brd-top-none g-brd-bottom g-brd-2 g-brd-gray-light-v4 g-py-10">
-                                    <div class="d-flex align-items-center g-line-height-1">
-                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover g-mr-15" href="/categories/view/{{ category.category_id }}">
-                                            <i class="hs-admin-pencil g-font-size-18"></i>
-                                        </a>
-                                        <a class="u-link-v5 g-color-gray-light-v6 g-color-secondary--hover" href="/goods-categories/view/{{ category.good_category_id }}">
-                                            <i class="hs-admin-unlink g-font-size-18"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                {% include '/App/Views/Components/Table/td/link.twig' with {
+                                    'href': '/attrs/view/' ~ attr.attr_id,
+                                    'value': attr.attr_id,
+                                } %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': attr.name,
+                                } %}
+                                {% if (attr.type == 'int' or attr.type == 'string' or attr.type == 'float') %}
+                                    {% set value = attr['ga_value_' ~ attr.type] %}
+                                {% elseif (attr.type == 'table') %}
+                                    {% set value = attr['ga_value_int'] %}
+                                {% elseif (attr.type == 'ref') %}
+                                    {% for k, v in params.references|filter(v => v.reference_value_id == attr.ga_value_int) -%}
+                                        {% if (v.type == 'ref') %}
+                                            {% set value = v['rv2_value_' ~ v.r2_type] %}
+                                        {% else %}
+                                            {% set value = v['value_' ~ v.type] %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% include '/App/Views/Components/Table/td/text.twig' with {
+                                    'value': value,
+                                } %}
+
+                                {% set buttons = [
+                                    {'icon': 'hs-admin-pencil', 'href': '/attrs/edit/' ~ attr.attr_id},
+                                    {'icon': 'hs-admin-unlink', 'href': '/goods-attrs/view/' ~ attr.ga_good_attr_id},
+                                ] %}
+
+                                {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                                    'buttons': buttons
+                                } %}
                             </tr>
                         {% endfor %}
                         </tbody>

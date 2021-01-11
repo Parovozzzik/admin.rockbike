@@ -14,11 +14,11 @@ use App\Models\User;
  *
  * @property integer $email_confirm
  * @property string $email_confirm_code
- * @property integer $email_confirmed_at
+ * @property \DateTime $email_confirmed_at
  *
  * @property integer $deleted
- * @property integer $created_at
- * @property integer $updated_at
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  */
 class EUser extends Entity
 {

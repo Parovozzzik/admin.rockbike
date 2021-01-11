@@ -15,7 +15,7 @@ use App\Models\GoodAttr;
  * @property integer $value_int
  * @property string $value_string
  * @property string $value_text
- * @property integer $created_at
+ * @property \DateTime $created_at
  */
 class EGoodAttr extends Entity
 {

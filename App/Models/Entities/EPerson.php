@@ -17,8 +17,8 @@ use App\Models\Person;
  * @property string $hobbies
  *
  * @property integer $deleted
- * @property integer $created_at
- * @property integer $updated_at
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  */
 class EPerson extends Entity
 {

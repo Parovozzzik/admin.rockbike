@@ -3,10 +3,10 @@
 namespace App\Settings\Exceptions;
 
 /**
- * Class DatabaseException
+ * Class StorageException
  * @package App\Settings\Exceptions
  */
-class DatabaseException extends \Exception
+class StorageException extends \Exception
 {
     /**
      * DatabaseException constructor.

@@ -388,6 +388,37 @@ class Routes
                 'controller' => 'Manufacturers',
                 'action' => 'ajaxList'
             ],
+
+            /** images */
+            '#^/images$#' => [
+                'controller' => 'Images',
+                'action' => 'Index'
+            ],
+            '#^/images/edit/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Images',
+                'action' => 'Edit',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/images/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Images',
+                'action' => 'View',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/images/delete/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Images',
+                'action' => 'Delete',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/images/create$#' => [
+                'controller' => 'Images',
+                'action' => 'Create'
+            ],
         ];
     }
 }

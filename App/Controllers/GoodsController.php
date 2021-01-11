@@ -130,7 +130,7 @@ class GoodsController extends Controller
                 $request = $good->toArray();
             }
         } else {
-            $message = new ResponseMessage('Атрибута с указанным идентификатором не существует.',
+            $message = new ResponseMessage('Товара с указанным идентификатором не существует.',
                 ResponseMessage::STATUS_ERROR,
                 ResponseMessage::ICON_ERROR);
 
@@ -141,11 +141,25 @@ class GoodsController extends Controller
         $categoriesModel = Category::getModel(ECategory::class);
         $categories = $categoriesModel->getByGoodId($good->good_id);
 
+        /** @var Attr $attrsModel */
+        $attrsModel = Attr::getModel(EAttr::class);
+        $attrs = $attrsModel->getByGoodId($good->good_id);
+
+        $referencesSlugs = array_filter(array_column($attrs, 'r_slug'), function ($item) {
+            return $item !== null;
+        });
+
+        /** @var Reference $referencesModel */
+        $referencesModel = Reference::getModel(EReference::class);
+        $referencesWithValues = $referencesModel->getBySlugsWithValues($referencesSlugs);
+
         $response->setView('goods.create');
 
         $this->render($response, [
             'request' => $request,
-            'categories' => $categories
+            'categories' => $categories,
+            'attrs' => $attrs,
+            'references' => $referencesWithValues,
         ]);
     }
 
@@ -182,10 +196,13 @@ class GoodsController extends Controller
      * @param EGood $good
      * @param Response $response
      */
-    protected function save(EGood $good, Response &$response): void
+    protected function save(EGood $good, Response $response): void
     {
         try {
-            $result = $this->mainModel->save($good);
+            $result = true;
+            if ($good->isModified()) {
+                $result = $this->mainModel->save($good);
+            }
             if ((bool)$result === true) {
                 $message = new ResponseMessage(
                     'Товар успешно сохранен!',
@@ -214,7 +231,7 @@ class GoodsController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function validate(EGood $good, array &$request, Response &$response): void
+    protected function validate(EGood $good, array &$request, Response $response): void
     {
         if (isset($request['price']) && trim($request['price'] === '')) {
             $request['price'] = null;

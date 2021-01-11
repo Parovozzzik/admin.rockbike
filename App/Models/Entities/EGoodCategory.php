@@ -12,7 +12,7 @@ use App\Models\GoodCategory;
  * @property integer $good_id
  * @property integer $category_id
  * @property integer $is_main
- * @property integer $created_at
+ * @property \DateTime $created_at
  */
 class EGoodCategory extends Entity
 {

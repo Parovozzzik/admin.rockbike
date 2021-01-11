@@ -1,0 +1,64 @@
+{% set path = '/../' ~ params.storage_path ~ '/' ~ data.model.created_at|date("Y/m/d") ~ '/s/' ~ data.model.path %}
+
+
+<div class="g-pa-20">
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate" name="image">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/images" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Image #{{ data.model.image_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Images/image.twig' with {
+                        'id': 'path',
+                        'model': 'image',
+                        'value': data.model.path,
+                        'path': path,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/textarea.twig' with {
+                        'id': 'description',
+                        'model': 'image',
+                        'value': data.model.description,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'visible',
+                        'model': 'image',
+                        'value': data.model.visible,
+                        'text_yes': 'Visible',
+                        'text_no': 'Not visible',
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'deleted',
+                        'model': 'image',
+                        'value': data.model.deleted,
+                        'text_yes': 'Deleted',
+                        'text_no': 'Not deleted',
+                        'disabled': 1
+                    } %}
+
+                    <a href="/images/edit/{{ data.model.image_id }}"
+                       class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                        Edit
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

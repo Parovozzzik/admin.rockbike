@@ -37,7 +37,7 @@ class Attr extends Model
         $query =
             "SELECT " .
                 "ra.*, rac.required, " .
-                "rga.value_int as ga_value_int, rga.value_string as ga_value_string, rga.value_text as ga_value_text, " .
+                "rga.good_attr_id as ga_good_attr_id, rga.value_int as ga_value_int, rga.value_string as ga_value_string, rga.value_text as ga_value_text, " .
                 "rr.name as r_name, rr.slug as r_slug, rr.type as r_type, " .
                 "rrv.value_int as rv_value_int, rrv.value_string as rv_value_string, rrv.value_text as rv_value_text, " .
                 "rrv2.value_int as rv2_value_int, rrv2.value_string as rv2_value_string, rrv2.value_text as rv2_value_text " .

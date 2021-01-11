@@ -233,7 +233,7 @@ class CategoriesController extends Controller
      * @param ECategory $category
      * @param Response $response
      */
-    protected function save(ECategory $category, Response &$response): void
+    protected function save(ECategory $category, Response $response): void
     {
         try {
             $result = $this->mainModel->save($category);
@@ -266,7 +266,7 @@ class CategoriesController extends Controller
      * @param array $request
      * @param Response $response
      */
-    protected function validate(ECategory $category, array &$request, Response &$response): void
+    protected function validate(ECategory $category, array &$request, Response $response): void
     {
         if (isset($request['parent_category_id']) && trim($request['parent_category_id'] === '')) {
             $request['parent_category_id'] = null;
