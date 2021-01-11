@@ -130,7 +130,7 @@ class GoodsController extends Controller
                 $request = $good->toArray();
             }
         } else {
-            $message = new ResponseMessage('Атрибута с указанным идентификатором не существует.',
+            $message = new ResponseMessage('Товара с указанным идентификатором не существует.',
                 ResponseMessage::STATUS_ERROR,
                 ResponseMessage::ICON_ERROR);
 
@@ -185,7 +185,10 @@ class GoodsController extends Controller
     protected function save(EGood $good, Response $response): void
     {
         try {
-            $result = $this->mainModel->save($good);
+            $result = true;
+            if ($good->isModified()) {
+                $result = $this->mainModel->save($good);
+            }
             if ((bool)$result === true) {
                 $message = new ResponseMessage(
                     'Товар успешно сохранен!',

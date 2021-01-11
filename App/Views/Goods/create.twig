@@ -18,6 +18,8 @@
 
                     <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
 
+                    <input id="good_id" name="good[good_id]" type="hidden" value="{{ params.request.good_id }}"/>
+
                     {% include '/App/Views/Components/Inputs/text.twig' with {
                         'id': 'name',
                         'model': 'good',
