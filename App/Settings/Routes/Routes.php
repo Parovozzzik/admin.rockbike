@@ -288,6 +288,72 @@ class Routes
                 'action' => 'Create'
             ],
 
+            /** goods attrs */
+            '#^/goods-images$#' => [
+                'controller' => 'GoodsImages',
+                'action' => 'Index'
+            ],
+            '#^/goods-images/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'GoodsImages',
+                'action' => 'View',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/goods-images/edit/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'GoodsImages',
+                'action' => 'Edit',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/goods-images/delete/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'GoodsImages',
+                'action' => 'Delete',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/goods-images/create$#' => [
+                'controller' => 'GoodsImages',
+                'action' => 'Create'
+            ],
+
+            /** galleries */
+            '#^/galleries$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Index'
+            ],
+            '#^/galleries/edit/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Edit',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/galleries/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Galleries',
+                'action' => 'View',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/galleries/delete/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Delete',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/galleries/create$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Create'
+            ],
+            '#^/galleries/ajax-list$#' => [
+                'controller' => 'Galleries',
+                'action' => 'ajaxList'
+            ],
+
             /** references */
             '#^/references$#' => [
                 'controller' => 'References',
