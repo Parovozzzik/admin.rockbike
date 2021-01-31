@@ -44,7 +44,10 @@ class ImagesService
         $this->manager = new ImageManager(['driver' => 'imagick']);
     }
 
-
+    /**
+     * @param string $path
+     * @return bool
+     */
     public function checkSizes(string $path): bool
     {
         $sizes = $this->getSizes($path);

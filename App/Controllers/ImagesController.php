@@ -55,7 +55,10 @@ class ImagesController extends Controller
         $response->setView('images.index');
         $response->setModels($images['data']);
 
-        $this->render($response, ['pager' => $images['pager']]);
+        $this->render($response, [
+            'storage_path' => ImagesService::STORAGE_PATH,
+            'pager' => $images['pager']
+        ]);
     }
 
     /**
