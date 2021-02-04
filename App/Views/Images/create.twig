@@ -70,5 +70,12 @@
                 </form>
             </div>
         </div>
+
+        {% if data.model.image_id != null %}
+            {% include '/App/Views/Images/images_galleries.twig' with {
+                'galleries': params.galleries,
+            } %}
+        {% endif %}
+
     </div>
 </div>

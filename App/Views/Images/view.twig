@@ -1,6 +1,5 @@
 {% set path = '/../' ~ params.storage_path ~ '/' ~ data.model.created_at|date("Y/m/d") ~ '/s/' ~ data.model.path %}
 
-
 <div class="g-pa-20">
     <div class="row">
 
@@ -24,6 +23,7 @@
                         'id': 'path',
                         'model': 'image',
                         'value': data.model.path,
+                        'description': data.model.description,
                         'path': path,
                         'disabled': 1
                     } %}
@@ -60,5 +60,12 @@
                 </form>
             </div>
         </div>
+
+        {% if data.model.image_id != null %}
+            {% include '/App/Views/Images/images_galleries.twig' with {
+                'galleries': params.galleries,
+            } %}
+        {% endif %}
+
     </div>
 </div>

@@ -76,7 +76,7 @@
 
         {% if params.request.gallery_id != null %}
             {% include '/App/Views/Galleries/images_galleries.twig' with {
-                'attrs': params.images
+                'images': params.images
             } %}
         {% endif %}
     </div>

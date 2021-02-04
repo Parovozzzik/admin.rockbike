@@ -2,7 +2,7 @@
     <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
         <header>
             <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
-                Images
+                Galleries
             </h2>
         </header>
 
@@ -12,32 +12,31 @@
             <table class="table table-responsive-sm w-100">
                 {% include '/App/Views/Components/Table/thead.twig' with {
                     'columns': ['Name', 'Visible', 'Deleted'],
-                    'total': images|length
+                    'total': galleries|length
                 } %}
                 <tbody>
-                {% for image in images %}
+                {% for gallery in galleries %}
                     <tr>
                         {% include '/App/Views/Components/Table/td/link.twig' with {
-                            'href': '/images/view/' ~ image.image_id,
-                            'value': image.image_id,
+                            'href': '/galleries/view/' ~ gallery.gallery_id,
+                            'value': gallery.gallery_id,
                         } %}
 
-                        {% include '/App/Views/Components/Table/td/image.twig' with {
-                            'value': image.path,
-                            'created_at': image.created_at
-                        } %}
-
-                        {% include '/App/Views/Components/Table/td/status.twig' with {
-                            'value': image.visible,
+                        {% include '/App/Views/Components/Table/td/text.twig' with {
+                            'value': gallery.name,
                         } %}
 
                         {% include '/App/Views/Components/Table/td/status.twig' with {
-                            'value': image.deleted,
+                            'value': gallery.visible,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/status.twig' with {
+                            'value': gallery.deleted,
                         } %}
 
                         {% set buttons = [
-                            {'icon': 'hs-admin-pencil', 'href': '/images/edit/' ~ image.image_id},
-                            {'icon': 'hs-admin-unlink', 'href': '/images-galleries/view/' ~ image.image_gallery_id},
+                            {'icon': 'hs-admin-pencil', 'href': '/galleries/edit/' ~ gallery.gallery_id},
+                            {'icon': 'hs-admin-unlink', 'href': '/images-galleries/view/' ~ gallery.image_gallery_id},
                         ] %}
 
                         {% include '/App/Views/Components/Table/td/buttons.twig' with {

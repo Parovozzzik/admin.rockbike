@@ -2,10 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Models\Entities\EGallery;
 use App\Models\Entities\EImage;
+use App\Models\Entities\EImageGallery;
 use App\Models\Entities\Responses\Response;
 use App\Models\Entities\Responses\ResponseMessage;
+use App\Models\Gallery;
 use App\Models\Image;
+use App\Models\ImageGallery;
 use App\Services\ImagesService;
 
 /**
@@ -62,6 +66,7 @@ class ImagesController extends Controller
     }
 
     /**
+     * @throws \App\Settings\Exceptions\DatabaseException
      * @throws \Twig\Error\Error
      */
     public function view()
@@ -82,8 +87,13 @@ class ImagesController extends Controller
         }
         $response->setView('images.view');
 
+        /** @var Gallery $galleryModel */
+        $galleryModel = Gallery::getModel(EGallery::class);
+        $galleries = $galleryModel->getByImageId($id);
+
         $this->render($response, [
-            'storage_path' => ImagesService::STORAGE_PATH
+            'galleries' => $galleries,
+            'storage_path' => ImagesService::STORAGE_PATH,
         ]);
     }
 
@@ -192,17 +202,22 @@ class ImagesController extends Controller
             $this->redirect('/images', [$message]);
         }
 
+        /** @var Gallery $galleryModel */
+        $galleryModel = Gallery::getModel(EGallery::class);
+        $galleries = $galleryModel->getByImageId($id);
+
         $response->setView('images.create');
         $this->render($response,
             [
                 'request' => $request,
+                'galleries' => $galleries,
                 'storage_path' => ImagesService::STORAGE_PATH,
             ]
         );
     }
 
     /**
-     * delete
+     * @throws \App\Settings\Exceptions\DatabaseException
      */
     public function delete()
     {
@@ -210,18 +225,23 @@ class ImagesController extends Controller
         $image = $this->mainModel->get($id);
 
         if ($image instanceof EImage) {
-            /**
-             * TODO: need to add checking relations for galleries and etc.
-             */
-            $this->mainModel->delete(['image_id' => $image->image_id]);
+            $imageGalleryModel = ImageGallery::getModel(EImageGallery::class);
+            $galleryExists = $imageGalleryModel->where(['image_id' => $image->image_id])->count() > 0;
 
-            $imageService = new ImagesService();
-            $imageService->unlink($image->path, $image->created_at);
-
-            $message = new ResponseMessage(
-                "Изображение # {$image->image_id} успешно удалено",
-                ResponseMessage::STATUS_SUCCESS,
-                ResponseMessage::ICON_SUCCESS);
+            if ($galleryExists === true) {
+                $message = new ResponseMessage(
+                    "Ошибка удаления изображения #{$image->image_id}. Изображение имеет связанные данные",
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            } else {
+                $this->mainModel->delete(['image_id' => $image->image_id]);
+                $imageService = new ImagesService();
+                $imageService->unlink($image->path, $image->created_at);
+                $message = new ResponseMessage(
+                    "Изображение #{$image->image_id} успешно удалено",
+                    ResponseMessage::STATUS_SUCCESS,
+                    ResponseMessage::ICON_SUCCESS);
+            }
         } else {
             $message = new ResponseMessage(
                 'Изображения с указанным идентификатором не существует',

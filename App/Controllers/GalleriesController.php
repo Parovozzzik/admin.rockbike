@@ -4,15 +4,19 @@ namespace App\Controllers;
 
 use App\Models\Entities\EGallery;
 use App\Models\Entities\EGood;
+use App\Models\Entities\EImage;
+use App\Models\Entities\EImageGallery;
 use App\Models\Entities\EManufacturer;
-use App\Models\Entities\Entity;
 use App\Models\Entities\EUser;
 use App\Models\Entities\Responses\Response;
 use App\Models\Entities\Responses\ResponseMessage;
 use App\Models\Gallery;
 use App\Models\Good;
+use App\Models\Image;
+use App\Models\ImageGallery;
 use App\Models\Manufacturer;
 use App\Models\User;
+use App\Services\ImagesService;
 
 /**
  * Class GalleriesController
@@ -49,7 +53,7 @@ class GalleriesController extends Controller
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Twig\Error\Error
      */
     public function index()
     {
@@ -71,13 +75,13 @@ class GalleriesController extends Controller
     {
         $id = $this->request['id'];
 
-        $attr = $this->mainModel->get($id);
+        $gallery = $this->mainModel->get($id);
         $response = new Response();
 
-        if ($attr instanceof EGallery) {
-            $response->setModel($attr);
+        if ($gallery instanceof EGallery) {
+            $response->setModel($gallery);
         } else {
-            $message = new ResponseMessage('Атрибута с указанным идентификатором не существует',
+            $message = new ResponseMessage('Галерея с указанным идентификатором не существует',
                 ResponseMessage::STATUS_ERROR,
                 ResponseMessage::ICON_ERROR);
 
@@ -91,13 +95,20 @@ class GalleriesController extends Controller
             $types[$type] = $type;
         }
 
+        /** @var Image $imagesModel */
+        $imagesModel = Image::getModel(EImage::class);
+        $images = $imagesModel->getByGalleryId($id);
+
         $this->render($response, [
             'types' => $types,
+            'images' => $images,
+            'storage_path' => ImagesService::STORAGE_PATH,
         ]);
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \App\Settings\Exceptions\DatabaseException
+     * @throws \Twig\Error\Error
      */
     public function create()
     {
@@ -132,7 +143,8 @@ class GalleriesController extends Controller
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \App\Settings\Exceptions\DatabaseException
+     * @throws \Twig\Error\Error
      */
     public function edit()
     {
@@ -167,13 +179,53 @@ class GalleriesController extends Controller
             $types[$type] = $type;
         }
 
+        /** @var Image $imagesModel */
+        $imagesModel = Image::getModel(EImage::class);
+        $images = $imagesModel->getByGalleryId($id);
+
         $response->setView('galleries.create');
         $this->render($response,
             [
                 'types' => $types,
                 'request' => $request,
+                'images' => $images,
+                'storage_path' => ImagesService::STORAGE_PATH,
             ]
         );
+    }
+
+    /**
+     * @throws \App\Settings\Exceptions\DatabaseException
+     */
+    public function delete()
+    {
+        $id = $this->request['id'];
+        $gallery = $this->mainModel->get($id);
+
+        if ($gallery instanceof EGallery) {
+            $imageGalleryModel = ImageGallery::getModel(EImageGallery::class);
+            $galleryExists = $imageGalleryModel->where(['gallery_id' => $gallery->gallery_id])->count() > 0;
+
+            if ($galleryExists === true) {
+                $message = new ResponseMessage(
+                    "Ошибка удаления галереи #{$gallery->gallery_id}. Галерея имеет связанные данные",
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            } else {
+                $this->mainModel->delete(['gallery_id' => $gallery->gallery_id]);
+                $message = new ResponseMessage(
+                    "Галерея #{$gallery->gallery_id} успешно удалена",
+                    ResponseMessage::STATUS_SUCCESS,
+                    ResponseMessage::ICON_SUCCESS);
+            }
+        } else {
+            $message = new ResponseMessage(
+                'Галереи с указанным идентификатором не существует',
+                ResponseMessage::STATUS_ERROR,
+                ResponseMessage::ICON_ERROR);
+        }
+
+        $this->redirect('/galleries', [$message]);
     }
 
     /**
