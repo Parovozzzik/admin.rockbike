@@ -1,0 +1,13 @@
+{% set path = '/../' ~ params.storage_path ~ '/' ~ created_at|date("Y/m/d") ~ '/s/' ~ value %}
+
+<td class="g-valign-middle g-brd-top-none g-brd-bottom g-brd-gray-light-v7 g-py-10 g-px-5 g-px-10--sm">
+    {% if href|length > 0 %}
+        <a href="{{ href }}">
+    {% endif %}
+    <img class="g-width-40 g-width-50--md g-height-40 g-height-50--md g-brd-around g-brd-2 g-brd-transparent g-brd-lightblue-v3--parent-opened"
+         style="border-radius: .25rem;border: solid 1px #585f69 !important;"
+         src="{{ path }}" alt="Image Description">
+    {% if href|length > 0 %}
+        </a>
+    {% endif %}
+</td>

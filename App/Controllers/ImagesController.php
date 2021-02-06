@@ -2,10 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Models\Entities\EGallery;
 use App\Models\Entities\EImage;
+use App\Models\Entities\EImageGallery;
 use App\Models\Entities\Responses\Response;
 use App\Models\Entities\Responses\ResponseMessage;
+use App\Models\Gallery;
 use App\Models\Image;
+use App\Models\ImageGallery;
 use App\Services\ImagesService;
 
 /**
@@ -40,6 +44,7 @@ class ImagesController extends Controller
             'edit' => !$this->isGuest,
             'create' => !$this->isGuest,
             'delete' => !$this->isGuest,
+            'join' => !$this->isGuest,
         ];
     }
 
@@ -55,10 +60,14 @@ class ImagesController extends Controller
         $response->setView('images.index');
         $response->setModels($images['data']);
 
-        $this->render($response, ['pager' => $images['pager']]);
+        $this->render($response, [
+            'storage_path' => ImagesService::STORAGE_PATH,
+            'pager' => $images['pager']
+        ]);
     }
 
     /**
+     * @throws \App\Settings\Exceptions\DatabaseException
      * @throws \Twig\Error\Error
      */
     public function view()
@@ -79,8 +88,13 @@ class ImagesController extends Controller
         }
         $response->setView('images.view');
 
+        /** @var Gallery $galleryModel */
+        $galleryModel = Gallery::getModel(EGallery::class);
+        $galleries = $galleryModel->getByImageId($id);
+
         $this->render($response, [
-            'storage_path' => ImagesService::STORAGE_PATH
+            'galleries' => $galleries,
+            'storage_path' => ImagesService::STORAGE_PATH,
         ]);
     }
 
@@ -189,17 +203,22 @@ class ImagesController extends Controller
             $this->redirect('/images', [$message]);
         }
 
+        /** @var Gallery $galleryModel */
+        $galleryModel = Gallery::getModel(EGallery::class);
+        $galleries = $galleryModel->getByImageId($id);
+
         $response->setView('images.create');
         $this->render($response,
             [
                 'request' => $request,
+                'galleries' => $galleries,
                 'storage_path' => ImagesService::STORAGE_PATH,
             ]
         );
     }
 
     /**
-     * delete
+     * @throws \App\Settings\Exceptions\DatabaseException
      */
     public function delete()
     {
@@ -207,18 +226,23 @@ class ImagesController extends Controller
         $image = $this->mainModel->get($id);
 
         if ($image instanceof EImage) {
-            /**
-             * TODO: need to add checking relations for galleries and etc.
-             */
-            $this->mainModel->delete(['image_id' => $image->image_id]);
+            $imageGalleryModel = ImageGallery::getModel(EImageGallery::class);
+            $galleryExists = $imageGalleryModel->where(['image_id' => $image->image_id])->count() > 0;
 
-            $imageService = new ImagesService();
-            $imageService->unlink($image->path, $image->created_at);
-
-            $message = new ResponseMessage(
-                "Изображение # {$image->image_id} успешно удалено",
-                ResponseMessage::STATUS_SUCCESS,
-                ResponseMessage::ICON_SUCCESS);
+            if ($galleryExists === true) {
+                $message = new ResponseMessage(
+                    "Ошибка удаления изображения #{$image->image_id}. Изображение имеет связанные данные",
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            } else {
+                $this->mainModel->delete(['image_id' => $image->image_id]);
+                $imageService = new ImagesService();
+                $imageService->unlink($image->path, $image->created_at);
+                $message = new ResponseMessage(
+                    "Изображение #{$image->image_id} успешно удалено",
+                    ResponseMessage::STATUS_SUCCESS,
+                    ResponseMessage::ICON_SUCCESS);
+            }
         } else {
             $message = new ResponseMessage(
                 'Изображения с указанным идентификатором не существует',
@@ -285,5 +309,78 @@ class ImagesController extends Controller
                     ResponseMessage::ICON_ERROR)
             );
         }
+    }
+
+    /**
+     * join image to gallery
+     *
+     * @throws \App\Settings\Exceptions\DatabaseException
+     */
+    public function join()
+    {
+        $imageId = null;
+        $message = null;
+        if (isset($_POST['image_gallery'])) {
+            $request = $_POST['image_gallery'];
+            $galleryId = $request['gallery_id'];
+            $imageId = $request['image_id'];
+
+            $message = null;
+            $imageModel = Image::getModel(EImage::class);
+            $image = $imageModel->get($imageId);
+            if (!$image instanceof EImage) {
+                $message = new ResponseMessage('Привязываемого изображения не существует!',
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            }
+
+            $galleryModel = Gallery::getModel(EGallery::class);
+            $gallery = $galleryModel->get($galleryId);
+            if (!$gallery instanceof EGallery) {
+                $message = new ResponseMessage('Привязываемой галереи не существует!',
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            }
+
+            $imageGalleryModel = ImageGallery::getModel(EImageGallery::class);
+            $imageGallery = $imageGalleryModel->first(['gallery_id' => $galleryId, 'image_id' => $imageId]);
+            if ($imageGallery instanceof EImageGallery) {
+                $message = new ResponseMessage('Данная связь уже существует!',
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            }
+
+            if ($message === null) {
+                $imageGallery = new EImageGallery();
+                $imageGallery->gallery_id = $galleryId;
+                $imageGallery->image_id = $imageId;
+                $imageGallery->is_main = 0;
+                $imageGallery->priority = 0;
+
+                $result = $imageGalleryModel->save($imageGallery);
+                if ((bool)$result === true) {
+                    $message = new ResponseMessage(
+                        'Связь успешно сохранена!',
+                        ResponseMessage::STATUS_SUCCESS,
+                        ResponseMessage::ICON_SUCCESS
+                    );
+                } else {
+                    $message = new ResponseMessage('Ошибка сохранения связи!',
+                        ResponseMessage::STATUS_ERROR,
+                        ResponseMessage::ICON_ERROR);
+                }
+            }
+        }
+
+        if ($imageId === null) {
+            $url = '/images';
+            $message = new ResponseMessage('Не переданы необходимые данные для создания связи!',
+                ResponseMessage::STATUS_ERROR,
+                ResponseMessage::ICON_ERROR);
+        } else {
+            $url = '/images/view/' . $imageId;
+        }
+
+        $this->redirect($url, [$message]);
     }
 }

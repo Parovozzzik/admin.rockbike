@@ -23,10 +23,8 @@ class GoodsCategoriesController extends Controller
     protected $mainModel;
 
     /**
-     * GoodsController constructor.
+     * GoodsCategoriesController constructor.
      * @throws \App\Settings\Exceptions\DatabaseException
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Spot\Exception
      */
     public function __construct()
     {

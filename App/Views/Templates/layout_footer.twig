@@ -3,6 +3,7 @@
 <script src="../../../assets/vendor/popper.js/popper.min.js"></script>
 <script src="../../../assets/vendor/bootstrap/bootstrap.min.js"></script>
 <script src="../../../assets/vendor/cookiejs/jquery.cookie.js"></script>
+<script src="../../../assets/vendor/jquery.filer/js/jquery.filer.min.js"></script>
 
 <!-- jQuery UI Core -->
 <script src="../../../assets/vendor/jquery-ui/ui/widget.js"></script>
@@ -43,6 +44,7 @@
 <script src="../../../assets/js/components/hs.bar-chart.js"></script>
 <script src="../../../assets/js/helpers/hs.focus-state.js"></script>
 <script src="../../../assets/js/components/hs.popup.js"></script>
+<script src="../../../assets/js/components/hs.file-attachement.js"></script>
 
 
 <!-- JS Custom -->
@@ -54,6 +56,7 @@
         // initialization of custom select
         $('.js-select').selectpicker();
 
+        $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
         // initialization of hamburger
         $.HSCore.helpers.HSHamburgers.init('.hamburger');
 

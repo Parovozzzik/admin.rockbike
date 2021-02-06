@@ -44,7 +44,10 @@ class ImagesService
         $this->manager = new ImageManager(['driver' => 'imagick']);
     }
 
-
+    /**
+     * @param string $path
+     * @return bool
+     */
     public function checkSizes(string $path): bool
     {
         $sizes = $this->getSizes($path);
@@ -124,7 +127,7 @@ class ImagesService
      * @param string $path
      * @return bool
      */
-    protected function createFolders(string $path): bool
+    public function createFolders(string $path): bool
     {
         $pathArray = explode('/', $path);
 
@@ -143,7 +146,7 @@ class ImagesService
      * @param \DateTime $dateTime
      * @return string
      */
-    protected function getPathFromDateTime(\DateTime $dateTime): string
+    public function getPathFromDateTime(\DateTime $dateTime): string
     {
         return $dateTime->format('Y/m/d');
     }

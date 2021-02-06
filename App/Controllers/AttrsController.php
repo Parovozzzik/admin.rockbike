@@ -217,13 +217,13 @@ class AttrsController extends Controller
 
             if ($categoryExists === true || $goodExists === true) {
                 $message = new ResponseMessage(
-                    'Ошибка удаления атрибута. Атрибут имеет связанные данные',
+                    "Ошибка удаления атрибута #{$attr->attr_id}. Атрибут имеет связанные данные",
                     ResponseMessage::STATUS_ERROR,
                     ResponseMessage::ICON_ERROR);
             } else {
                 $this->mainModel->delete(['attr_id' => $attr->attr_id]);
                 $message = new ResponseMessage(
-                    "Атрибут # {$attr->attr_id} успешно удален",
+                    "Атрибут #{$attr->attr_id} успешно удален",
                     ResponseMessage::STATUS_SUCCESS,
                     ResponseMessage::ICON_SUCCESS);
             }

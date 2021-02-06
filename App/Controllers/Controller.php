@@ -39,24 +39,25 @@ class Controller
 
     /**
      * Controller constructor.
-     * @throws \App\Settings\Exceptions\DatabaseException
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Spot\Exception
      */
     public function __construct()
     {
-        $this->request = $_REQUEST;
+        try {
+            $this->request = $_REQUEST;
 
-        Database::addConnection(
-            getenv('DB_URI'),
-            [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
-        );
+            Database::addConnection(
+                getenv('DB_URI'),
+                [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
+            );
 
-        $this->userModel = User::getModel(EUser::class);
-        $this->usersService = new UsersService();
-        if ($this->usersService->isLogin()) {
-            $this->isGuest = false;
-            $this->user = $this->userModel->get($_SESSION['id']);
+            $this->userModel = User::getModel(EUser::class);
+            $this->usersService = new UsersService();
+            if ($this->usersService->isLogin()) {
+                $this->isGuest = false;
+                $this->user = $this->userModel->get($_SESSION['id']);
+            }
+        } catch (\Throwable $e) {
+            $this->redirect('/404', $e->getTrace());
         }
     }
 

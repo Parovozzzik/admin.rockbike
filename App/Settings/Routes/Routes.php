@@ -288,6 +288,69 @@ class Routes
                 'action' => 'Create'
             ],
 
+            /** images galleries */
+            '#^/images-galleries$#' => [
+                'controller' => 'ImagesGalleries',
+                'action' => 'Index'
+            ],
+            '#^/images-galleries/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'ImagesGalleries',
+                'action' => 'View',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/images-galleries/delete/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'ImagesGalleries',
+                'action' => 'Delete',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/images-galleries/create$#' => [
+                'controller' => 'ImagesGalleries',
+                'action' => 'Create'
+            ],
+
+            /** galleries */
+            '#^/galleries$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Index'
+            ],
+            '#^/galleries/edit/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Edit',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/galleries/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Galleries',
+                'action' => 'View',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/galleries/delete/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Delete',
+                'params' => [
+                    'id',
+                ],
+            ],
+            '#^/galleries/create$#' => [
+                'controller' => 'Galleries',
+                'action' => 'Create'
+            ],
+            '#^/galleries/upload$#' => [
+                'controller' => 'Galleries',
+                'action' => 'ajaxUpload'
+            ],
+            '#^/galleries/ajax-list$#' => [
+                'controller' => 'Galleries',
+                'action' => 'ajaxList'
+            ],
+
             /** references */
             '#^/references$#' => [
                 'controller' => 'References',
@@ -418,6 +481,10 @@ class Routes
             '#^/images/create$#' => [
                 'controller' => 'Images',
                 'action' => 'Create'
+            ],
+            '#^/images/join$#' => [
+                'controller' => 'Images',
+                'action' => 'join'
             ],
         ];
     }

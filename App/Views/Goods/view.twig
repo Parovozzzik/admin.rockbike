@@ -180,6 +180,27 @@
                     </table>
                 </div>
             </div>
+
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <header>
+                    <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                        Gallery
+                    </h2>
+                </header>
+
+                <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                {% set galleryText = 'Create gallery' %}
+                {% set galleryUrl = '/galleries/create?type=good&parentObjectId=' ~ data.model.good_id %}
+                {% if params.galleryId|length > 0 %}
+                    {% set galleryText = 'Gallery' %}
+                    {% set galleryUrl = '/galleries/view/' ~ params.galleryId %}
+                {% endif %}
+                <a href="{{ galleryUrl }}" class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13">
+                    {{ galleryText }}
+                </a>
+
+            </div>
         </div>
     </div>
 </div>

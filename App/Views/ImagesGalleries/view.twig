@@ -1,0 +1,77 @@
+{% set gallery_id = data.model.gallery_id %}
+{% if gallery_id is not defined or gallery_id == null %}
+    {% set gallery_url = '#' %}
+{% else %}
+    {% set gallery_url = '/galleries/view/' ~ gallery_id %}
+{% endif %}
+
+{% set image_id = data.model.image_id %}
+{% if image_id is not defined or image_id == null %}
+    {% set image_url = '#' %}
+{% else %}
+    {% set image_url = '/images/view/' ~ image_id %}
+{% endif %}
+
+{% set path = '/../' ~ params.storage_path ~ '/' ~ data.model.created_at|date("Y/m/d") ~ '/s/' ~ data.model.path %}
+
+<div class="g-pa-20">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate" name="attr_category">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/images-galleries" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Image Gallery #{{ data.model.image_gallery_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                        'id': 'gallery_name',
+                        'model': 'image_gallery',
+                        'value': data.model.gallery_name,
+                        'value_url': gallery_url,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Images/image.twig' with {
+                        'id': 'path',
+                        'model': 'image_gallery',
+                        'value': data.model.path,
+                        'description': data.model.description,
+                        'path': path,
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/checkbox.twig' with {
+                        'id': 'is_main',
+                        'model': 'image_gallery',
+                        'value': data.model.is_main,
+                        'text_yes': 'Is Main',
+                        'text_no': 'Is Not Main',
+                        'disabled': 1
+                    } %}
+
+                    {% include '/App/Views/Components/Inputs/text.twig' with {
+                        'id': 'priority',
+                        'model': 'image_gallery',
+                        'value': data.model.priority,
+                        'disabled': 1
+                    } %}
+
+                    <a href="/images-galleries/delete/{{ data.model.image_gallery_id }}"
+                       class="btn btn-md btn-block u-btn-primary rounded text-uppercase g-py-13" type="submit"
+                       onclick="return confirm('Are you sure you want to delete this item?');">
+                        Delete
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,8 +5,9 @@
         'value': image.image_id,
     } %}
 
-    {% include '/App/Views/Components/Table/td/text.twig' with {
+    {% include '/App/Views/Components/Table/td/image.twig' with {
         'value': image.path,
+        'created_at': image.created_at
     } %}
 
     {% include '/App/Views/Components/Table/td/status.twig' with {

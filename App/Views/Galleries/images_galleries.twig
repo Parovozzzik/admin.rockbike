@@ -1,0 +1,57 @@
+<div class="col-md-6">
+    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+        <header>
+            <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                Images
+            </h2>
+        </header>
+
+        <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+        <div class="">
+            <table class="table table-responsive-sm w-100">
+                {% include '/App/Views/Components/Table/thead.twig' with {
+                    'columns': ['Name', 'Visible', 'Deleted'],
+                    'total': images|length
+                } %}
+                <tbody>
+                {% for image in images %}
+                    <tr>
+                        {% include '/App/Views/Components/Table/td/link.twig' with {
+                            'href': '/images/view/' ~ image.image_id,
+                            'value': image.image_id,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/image.twig' with {
+                            'value': image.path,
+                            'created_at': image.created_at
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/status.twig' with {
+                            'value': image.visible,
+                        } %}
+
+                        {% include '/App/Views/Components/Table/td/status.twig' with {
+                            'value': image.deleted,
+                        } %}
+
+                        {% set buttons = [
+                            {'icon': 'hs-admin-pencil', 'href': '/images/edit/' ~ image.image_id},
+                            {'icon': 'hs-admin-unlink', 'href': '/images-galleries/view/' ~ image.image_gallery_id},
+                        ] %}
+
+                        {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                            'buttons': buttons
+                        } %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% include '/App/Views/Components/Inputs/filer.twig' with {
+                'gallery_id': data.model.gallery_id,
+            } %}
+
+        </div>
+    </div>
+</div>
