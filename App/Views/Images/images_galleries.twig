@@ -8,44 +8,70 @@
 
         <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
 
-        <div class="">
-            <table class="table table-responsive-sm w-100">
-                {% include '/App/Views/Components/Table/thead.twig' with {
-                    'columns': ['Name', 'Visible', 'Deleted'],
-                    'total': galleries|length
-                } %}
-                <tbody>
-                {% for gallery in galleries %}
-                    <tr>
-                        {% include '/App/Views/Components/Table/td/link.twig' with {
-                            'href': '/galleries/view/' ~ gallery.gallery_id,
-                            'value': gallery.gallery_id,
-                        } %}
+        <table class="table table-responsive-sm w-100">
+            {% include '/App/Views/Components/Table/thead.twig' with {
+                'columns': ['Name', 'Visible', 'Deleted'],
+                'total': galleries|length
+            } %}
+            <tbody>
+            {% for gallery in galleries %}
+                <tr>
+                    {% include '/App/Views/Components/Table/td/link.twig' with {
+                        'href': '/galleries/view/' ~ gallery.gallery_id,
+                        'value': gallery.gallery_id,
+                    } %}
 
-                        {% include '/App/Views/Components/Table/td/text.twig' with {
-                            'value': gallery.name,
-                        } %}
+                    {% include '/App/Views/Components/Table/td/text.twig' with {
+                        'value': gallery.name,
+                    } %}
 
-                        {% include '/App/Views/Components/Table/td/status.twig' with {
-                            'value': gallery.visible,
-                        } %}
+                    {% include '/App/Views/Components/Table/td/status.twig' with {
+                        'value': gallery.visible,
+                    } %}
 
-                        {% include '/App/Views/Components/Table/td/status.twig' with {
-                            'value': gallery.deleted,
-                        } %}
+                    {% include '/App/Views/Components/Table/td/status.twig' with {
+                        'value': gallery.deleted,
+                    } %}
 
-                        {% set buttons = [
-                            {'icon': 'hs-admin-pencil', 'href': '/galleries/edit/' ~ gallery.gallery_id},
-                            {'icon': 'hs-admin-unlink', 'href': '/images-galleries/view/' ~ gallery.image_gallery_id},
-                        ] %}
+                    {% set buttons = [
+                        {'icon': 'hs-admin-pencil', 'href': '/galleries/edit/' ~ gallery.gallery_id},
+                        {'icon': 'hs-admin-unlink', 'href': '/images-galleries/view/' ~ gallery.image_gallery_id},
+                    ] %}
 
-                        {% include '/App/Views/Components/Table/td/buttons.twig' with {
-                            'buttons': buttons
-                        } %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+                        'buttons': buttons
+                    } %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+        <header>
+            <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                Add to gallery
+            </h2>
+        </header>
+
+        <form action="/images/join" method="post" class="js-validate" novalidate="novalidate" name="image_gallery">
+
+            <input id="image_id" name="image_gallery[image_id]" type="hidden" value="{{ data.model.image_id }}"/>
+
+            {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                'id': 'gallery_id',
+                'model': 'image_gallery',
+                'value': params.request.gallery_id,
+                'values': params.good,
+                'error': data.errors.gallery_id|length > 0 ? data.errors.gallery_id : 0
+            } %}
+
+            <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                Join
+            </button>
+        </form>
+
+        <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
     </div>
 </div>

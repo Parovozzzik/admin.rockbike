@@ -1,0 +1,37 @@
+<tr id="images-galleries-{{ image_gallery.image_gallery_id }}" role="tab">
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/images-galleries/view/' ~ image_gallery.image_gallery_id,
+        'value': image_gallery.image_gallery_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/link.twig' with {
+        'href': '/galleries/view/' ~ image_gallery.gallery_id,
+        'value': image_gallery.gallery_name,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/image.twig' with {
+        'value': image_gallery.path,
+        'created_at': image_gallery.created_at,
+        'href': '/images/view/' ~ image_gallery.image_id,
+    } %}
+
+    {% include '/App/Views/Components/Table/td/status.twig' with {
+        'value': image_gallery.is_main,
+        'text_enabled': 'Main',
+        'text_disabled': 'Secondary',
+    } %}
+
+    {% include '/App/Views/Components/Table/td/text.twig' with {
+        'value': image_gallery.priority,
+    } %}
+
+    {% set buttons = [
+        {'icon': 'hs-admin-trash', 'href': '/images-galleries/delete/' ~ image_gallery.image_gallery_id, 'onclick': 'Are you sure you want to delete this item?'},
+    ] %}
+
+    {% include '/App/Views/Components/Table/td/buttons.twig' with {
+        'buttons': buttons
+    } %}
+
+</tr>

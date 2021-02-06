@@ -47,6 +47,11 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+            {% include '/App/Views/Components/Inputs/filer.twig' with {
+                'gallery_id': data.model.gallery_id,
+            } %}
+
         </div>
     </div>
 </div>

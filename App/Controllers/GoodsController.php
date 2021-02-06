@@ -6,10 +6,12 @@ use App\Models\Attr;
 use App\Models\Category;
 use App\Models\Entities\EAttr;
 use App\Models\Entities\ECategory;
+use App\Models\Entities\EGallery;
 use App\Models\Entities\EGood;
 use App\Models\Entities\EReference;
 use App\Models\Entities\Responses\Response;
 use App\Models\Entities\Responses\ResponseMessage;
+use App\Models\Gallery;
 use App\Models\Good;
 use App\Models\Reference;
 
@@ -97,12 +99,20 @@ class GoodsController extends Controller
         $referencesModel = Reference::getModel(EReference::class);
         $referencesWithValues = $referencesModel->getBySlugsWithValues($referencesSlugs);
 
+        $galleryModel = Gallery::getModel(EGallery::class);
+        $galleryId = null;
+        $gallery = $galleryModel->first(['type' => EGallery::GALLERY_TYPE_GOOD, 'parent_object_id' => $id]);
+        if ($gallery instanceof EGallery) {
+            $galleryId = $gallery->gallery_id;
+        }
+
         $response->setView('goods.view');
 
         $this->render($response, [
             'categories' => $categories,
             'attrs' => $attrs,
-            'references' => $referencesWithValues
+            'references' => $referencesWithValues,
+            'galleryId' => $galleryId,
         ]);
     }
 

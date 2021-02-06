@@ -44,6 +44,7 @@ class ImagesController extends Controller
             'edit' => !$this->isGuest,
             'create' => !$this->isGuest,
             'delete' => !$this->isGuest,
+            'join' => !$this->isGuest,
         ];
     }
 
@@ -308,5 +309,78 @@ class ImagesController extends Controller
                     ResponseMessage::ICON_ERROR)
             );
         }
+    }
+
+    /**
+     * join image to gallery
+     *
+     * @throws \App\Settings\Exceptions\DatabaseException
+     */
+    public function join()
+    {
+        $imageId = null;
+        $message = null;
+        if (isset($_POST['image_gallery'])) {
+            $request = $_POST['image_gallery'];
+            $galleryId = $request['gallery_id'];
+            $imageId = $request['image_id'];
+
+            $message = null;
+            $imageModel = Image::getModel(EImage::class);
+            $image = $imageModel->get($imageId);
+            if (!$image instanceof EImage) {
+                $message = new ResponseMessage('Привязываемого изображения не существует!',
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            }
+
+            $galleryModel = Gallery::getModel(EGallery::class);
+            $gallery = $galleryModel->get($galleryId);
+            if (!$gallery instanceof EGallery) {
+                $message = new ResponseMessage('Привязываемой галереи не существует!',
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            }
+
+            $imageGalleryModel = ImageGallery::getModel(EImageGallery::class);
+            $imageGallery = $imageGalleryModel->first(['gallery_id' => $galleryId, 'image_id' => $imageId]);
+            if ($imageGallery instanceof EImageGallery) {
+                $message = new ResponseMessage('Данная связь уже существует!',
+                    ResponseMessage::STATUS_ERROR,
+                    ResponseMessage::ICON_ERROR);
+            }
+
+            if ($message === null) {
+                $imageGallery = new EImageGallery();
+                $imageGallery->gallery_id = $galleryId;
+                $imageGallery->image_id = $imageId;
+                $imageGallery->is_main = 0;
+                $imageGallery->priority = 0;
+
+                $result = $imageGalleryModel->save($imageGallery);
+                if ((bool)$result === true) {
+                    $message = new ResponseMessage(
+                        'Связь успешно сохранена!',
+                        ResponseMessage::STATUS_SUCCESS,
+                        ResponseMessage::ICON_SUCCESS
+                    );
+                } else {
+                    $message = new ResponseMessage('Ошибка сохранения связи!',
+                        ResponseMessage::STATUS_ERROR,
+                        ResponseMessage::ICON_ERROR);
+                }
+            }
+        }
+
+        if ($imageId === null) {
+            $url = '/images';
+            $message = new ResponseMessage('Не переданы необходимые данные для создания связи!',
+                ResponseMessage::STATUS_ERROR,
+                ResponseMessage::ICON_ERROR);
+        } else {
+            $url = '/images/view/' . $imageId;
+        }
+
+        $this->redirect($url, [$message]);
     }
 }

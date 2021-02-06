@@ -1,11 +1,11 @@
 <div class="g-pa-20">
     <div class="media">
         <div class="d-flex align-self-center">
-            <h1 class="g-font-weight-300 g-font-size-28 g-color-black mb-0">Images</h1>
+            <h1 class="g-font-weight-300 g-font-size-28 g-color-black mb-0">Images Galleries</h1>
         </div>
 
         <div class="media-body align-self-center text-right">
-            <a class="btn btn-md u-btn-teal g-width-160--md g-font-size-default g-ml-10" href="/images/create">
+            <a class="btn btn-md u-btn-teal g-width-160--md g-font-size-default g-ml-10" href="/images-galleries/create">
                 Create
             </a>
         </div>
@@ -15,13 +15,13 @@
 
     <table class="table w-100 g-mb-25">
         {% include '/App/Views/Components/Table/thead.twig' with {
-            'columns': ['Path', 'Visible', 'Deleted'],
+            'columns': ['Gallery', 'Image', 'Is Main', 'Priority'],
             'total': params.pager.total
         } %}
 
-        <tbody class="g-font-size-default g-color-black" id="images" role="tablist" aria-multiselectable="true">
-            {% for image in data.models %}
-                {{ include ('/App/Views/Images/list_item.twig', {image: image}) }}
+        <tbody class="g-font-size-default g-color-black" id="accordion-09" role="tablist" aria-multiselectable="true">
+            {% for image_gallery in data.models %}
+                {{ include ('/App/Views/ImagesGalleries/list_item.twig', {image_gallery: image_gallery}) }}
             {% endfor %}
         </tbody>
     </table>

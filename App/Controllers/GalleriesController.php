@@ -16,6 +16,7 @@ use App\Models\Image;
 use App\Models\ImageGallery;
 use App\Models\Manufacturer;
 use App\Models\User;
+use App\Services\UploaderService;
 use App\Services\ImagesService;
 
 /**
@@ -48,6 +49,7 @@ class GalleriesController extends Controller
             'edit' => !$this->isGuest,
             'create' => !$this->isGuest,
             'delete' => !$this->isGuest,
+            'ajaxUpload' => !$this->isGuest,
             'ajaxList' => !$this->isGuest,
         ];
     }
@@ -115,6 +117,12 @@ class GalleriesController extends Controller
         $response = new Response();
 
         $gallery = new EGallery();
+        if (isset($this->request['type']) && in_array($this->request['type'], EGallery::GALLERY_TYPES)) {
+            $gallery->type = $this->request['type'];
+        }
+        if (isset($this->request['parentObjectId'])) {
+            $gallery->parent_object_id = $this->request['parentObjectId'];
+        }
         $response->setModel($gallery);
 
         if (isset($_POST['gallery'])) {
@@ -319,5 +327,65 @@ class GalleriesController extends Controller
                 }
             }
         }
+    }
+
+    /**
+     * @return array
+     * @throws \App\Settings\Exceptions\DatabaseException
+     */
+    public function ajaxList()
+    {
+        $text = $this->request['text'];
+
+        $galleries = $this->mainModel->getByText($text);
+
+        return $galleries;
+    }
+
+    /**
+     * @return array
+     * @throws \App\Settings\Exceptions\DatabaseException
+     */
+    public function ajaxUpload()
+    {
+        $files = $_FILES['images'];
+
+        $galleryId = null;
+        if (isset($this->request['galleryId'])) {
+            $galleryId = (int)$this->request['galleryId'];
+        }
+
+        $date = new \DateTime();
+
+        $imageService = new ImagesService();
+        $result = $imageService->upload($files, $date);
+
+        $image = new EImage();
+        $image->path = $result;
+        $image->created_at = $date;
+        $imageModel = Image::getModel(EImage::class);
+        $imageModel->save($image);
+
+        if ($galleryId !== null) {
+            $imageGallery = new EImageGallery();
+            $imageGallery->image_id = $image->image_id;
+            $imageGallery->gallery_id = $galleryId;
+            $imageGallery->is_main = 0;
+            $imageGallery->priority = 0;
+            $imageGalleryModel = ImageGallery::getModel(EImageGallery::class);
+            $imageGalleryModel->save($imageGallery);
+        }
+
+        $uploader = new UploaderService();
+        $datePath = $imageService->getPathFromDateTime($date);
+        $fullPath = ImagesService::STORAGE_PATH . DS . $datePath . DS . 'or' . DS;
+        $imageService->createFolders($fullPath);
+
+        return $uploader->upload($files,
+            [
+                'uploadDir' => $fullPath,
+                'fileName' => $result,
+            ]
+        );
     }
 }

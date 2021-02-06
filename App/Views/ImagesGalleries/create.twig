@@ -1,0 +1,69 @@
+{% if params.step is not defined %}
+    {% set step = 1 %}
+{% else %}
+    {% set step = params.step %}
+{% endif %}
+
+<div class="g-pa-20">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                {% if step == 1 %}
+                    <form action="/images-galleries/create"
+                          method="post" class="js-validate" novalidate="novalidate" name="image_gallery">
+                        <header>
+                            <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                                <a href="/images-galleries" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                    <span class="">
+                                        <i class="hs-admin-angle-left"></i>
+                                    </span>
+                                </a>
+                                Image Gallery #{{ params.request.image_gallery_id }}
+                            </h2>
+                        </header>
+
+                        <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                        {% include '/App/Views/Components/Inputs/select_search.twig' with {
+                            'id': 'gallery_id',
+                            'model': 'image_gallery',
+                            'value': params.request.gallery_id,
+                            'values': params.good,
+                            'error': data.errors.gallery_id|length > 0 ? data.errors.gallery_id : 0
+                        } %}
+
+                        <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
+                            Next
+                        </button>
+                    </form>
+                {% endif %}
+
+                {% if step == 2 %}
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">
+                            <a href="/images-galleries" class="btn btn-xs u-btn-outline-teal g-mr-10">
+                                <span class="">
+                                    <i class="hs-admin-angle-left"></i>
+                                </span>
+                            </a>
+                            Images to Gallery #{{ params.request.gallery_id }}
+                        </h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+                    <input id="gallery_id" name="image_gallery[gallery_id]" type="hidden" value="{{ params.request.gallery_id }}"/>
+
+                    {% include '/App/Views/Components/Inputs/filer.twig' with {
+                        'gallery_id': params.request.gallery_id,
+                    } %}
+
+                    {% set galleryText = 'To gallery' %}
+                    {% set galleryUrl = '/galleries/view/' ~ params.request.gallery_id %}
+                    <a href="{{ galleryUrl }}" class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13">
+                        {{ galleryText }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

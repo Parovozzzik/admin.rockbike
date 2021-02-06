@@ -36,4 +36,25 @@ class Gallery extends Model
 
         return $result;
     }
+
+    /**
+     * @param string $text
+     * @return array
+     * @throws \App\Settings\Exceptions\DatabaseException
+     */
+    public function getByText(string $text): array
+    {
+        $table = $this->table();
+        $query =
+            "SELECT gallery_id, name " .
+            "FROM {$table} " .
+            "WHERE (name LIKE '%{$text}%' " .
+                "OR slug LIKE '%{$text}%') " .
+                "AND visible = 1 " .
+                "AND deleted = 0;";
+
+        $result = $this->query($query)->toArray('gallery_id', 'name');
+
+        return $result;
+    }
 }

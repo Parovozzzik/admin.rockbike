@@ -288,34 +288,27 @@ class Routes
                 'action' => 'Create'
             ],
 
-            /** goods attrs */
-            '#^/goods-images$#' => [
-                'controller' => 'GoodsImages',
+            /** images galleries */
+            '#^/images-galleries$#' => [
+                'controller' => 'ImagesGalleries',
                 'action' => 'Index'
             ],
-            '#^/goods-images/view/(?P<id>[0-9-]+)$#' => [
-                'controller' => 'GoodsImages',
+            '#^/images-galleries/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'ImagesGalleries',
                 'action' => 'View',
                 'params' => [
                     'id',
                 ],
             ],
-            '#^/goods-images/edit/(?P<id>[0-9-]+)$#' => [
-                'controller' => 'GoodsImages',
-                'action' => 'Edit',
-                'params' => [
-                    'id',
-                ],
-            ],
-            '#^/goods-images/delete/(?P<id>[0-9-]+)$#' => [
-                'controller' => 'GoodsImages',
+            '#^/images-galleries/delete/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'ImagesGalleries',
                 'action' => 'Delete',
                 'params' => [
                     'id',
                 ],
             ],
-            '#^/goods-images/create$#' => [
-                'controller' => 'GoodsImages',
+            '#^/images-galleries/create$#' => [
+                'controller' => 'ImagesGalleries',
                 'action' => 'Create'
             ],
 
@@ -348,6 +341,10 @@ class Routes
             '#^/galleries/create$#' => [
                 'controller' => 'Galleries',
                 'action' => 'Create'
+            ],
+            '#^/galleries/upload$#' => [
+                'controller' => 'Galleries',
+                'action' => 'ajaxUpload'
             ],
             '#^/galleries/ajax-list$#' => [
                 'controller' => 'Galleries',
@@ -484,6 +481,10 @@ class Routes
             '#^/images/create$#' => [
                 'controller' => 'Images',
                 'action' => 'Create'
+            ],
+            '#^/images/join$#' => [
+                'controller' => 'Images',
+                'action' => 'join'
             ],
         ];
     }
